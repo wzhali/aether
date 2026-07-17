@@ -163,6 +163,11 @@ jobs:
           export TERM=xterm
           ./scripts/feeds update -i luci
           ./scripts/feeds install -p luci luci-theme-aether
+          # Dump the feed package to see exactly what feeds install checked.
+          echo "--- feeds/luci/luci-theme-aether/dump.txt ---"
+          cat logs/feeds/luci/luci-theme-aether/dump.txt 2>&1 || echo "(missing)"
+          echo "--- feeds/luci/luci-theme-aether/Makefile ---"
+          cat feeds/luci/luci-theme-aether/Makefile 2>&1 | head -50
           # Generate a minimal .config without invoking menuconfig.
           make defconfig
           yes "" | make oldconfig >/dev/null 2>&1 || true
