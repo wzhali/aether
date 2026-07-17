@@ -192,22 +192,24 @@ jobs:
           du -sh bin/packages 2>/dev/null || true
           df -h .
 
-      - name: Locate .ipk
+      - name: Locate package artifact (.apk / .ipk)
         id: find
         run: |
-          IPK=$(find sdk/bin/packages -name 'luci-theme-aether_*.ipk' | head -n1)
-          if [ -z "$IPK" ]; then
-            echo "ERROR: no .ipk found under sdk/bin/packages" >&2
+          # OpenWrt 25.12 switched its package format to APK (.apk); older
+          # releases used .ipk. Accept either so the same workflow works.
+          PKG=$(find sdk/bin/packages \( -name 'luci-theme-aether_*.ipk' -o -name 'luci-theme-aether-*.apk' \) | head -n1)
+          if [ -z "$PKG" ]; then
+            echo "ERROR: no package artifact found under sdk/bin/packages" >&2
             find sdk/bin -type f | head -20 >&2 || true
             exit 1
           fi
-          echo "ipk=$IPK" >> "$GITHUB_OUTPUT"
-          echo "Found $IPK"
+          echo "ipk=$PKG" >> "$GITHUB_OUTPUT"
+          echo "Found $PKG"
 
-      - name: Upload .ipk artifact
+      - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
-          name: aether-ipk
+          name: aether-package
           path: ${{ steps.find.outputs.ipk }}
           if-no-files-found: error
 
