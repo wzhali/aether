@@ -233,21 +233,23 @@ jobs:
           echo "Inspecting $PKG"
           case "$PKG" in
             *.apk)
-              # OpenWrt 25.12 switched to APK (Alpine) format: just a
-              # gzipped tar archive. List and extract with plain tar.
-              echo "--- tar listing (first 30) ---"
-              tar -tzf "$PKG" | head -30
-              tar -tzf "$PKG" | grep -E '(\.PKGINFO|post-install|post-upgrade)' >/dev/null
-              tar -tzf "$PKG" | grep -E '/www/luci-static/aether/(theme\.htm|css/aether\.css|js/aether\.js)' >/dev/null
-              mkdir -p data && tar -xzf "$PKG" -C data
+              # OpenWrt 25.12 ships .apk packages (Alpine format). They are
+              # NOT plain gzipped tarballs — they wrap a tar+gzip stream in
+              # an 8-byte signature header, with control blocks before the
+              # file list. Use our stdlib-based extractor instead.
+              echo "--- $PKG size ---"
+              ls -la "$PKG"
+              echo "--- magic bytes ---"
+              xxd "$PKG" | head -1
+              python3 ../../scripts/apk_extract.py "$PKG" data
               echo "--- /www/luci-static/aether top-level ---"
               ls data/www/luci-static/aether/
               echo "--- CSS files ---"
               ls data/www/luci-static/aether/css/ | head
               echo "--- JS files ---"
               ls data/www/luci-static/aether/js/
-              echo "--- PKGINFO ---"
-              cat data/.PKGINFO 2>/dev/null || head -c 200 data/.PKGINFO
+              echo "--- .PKGINFO (first 30 lines) ---"
+              head -30 data/.PKGINFO 2>/dev/null || echo "(missing)"
               ;;
             *.ipk)
               # Legacy opkg format: gzipped ar archive.
