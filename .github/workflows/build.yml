@@ -233,21 +233,21 @@ jobs:
           echo "Inspecting $PKG"
           case "$PKG" in
             *.apk)
-              # OpenWrt 25.12 switched to APK (Alpine) format. Use apk-tools
-              # to list contents and verify the expected files are inside.
-              which apk >/dev/null 2>&1 || sudo apt-get install -y -qq apk-tools
-              apk -v list "$PKG" || true
-              mkdir -p _extract
-              tar -tzf "$PKG" | head -40
+              # OpenWrt 25.12 switched to APK (Alpine) format: just a
+              # gzipped tar archive. List and extract with plain tar.
+              echo "--- tar listing (first 30) ---"
+              tar -tzf "$PKG" | head -30
               tar -tzf "$PKG" | grep -E '(\.PKGINFO|post-install|post-upgrade)' >/dev/null
               tar -tzf "$PKG" | grep -E '/www/luci-static/aether/(theme\.htm|css/aether\.css|js/aether\.js)' >/dev/null
               mkdir -p data && tar -xzf "$PKG" -C data
               echo "--- /www/luci-static/aether top-level ---"
-              ls data/www/luci-static/aether/ || ls data/
+              ls data/www/luci-static/aether/
               echo "--- CSS files ---"
-              find data -path '*luci-static/aether/css/*.css' | head -5 || true
+              ls data/www/luci-static/aether/css/ | head
               echo "--- JS files ---"
-              find data -path '*luci-static/aether/js/*.js' | head -5 || true
+              ls data/www/luci-static/aether/js/
+              echo "--- PKGINFO ---"
+              cat data/.PKGINFO 2>/dev/null || head -c 200 data/.PKGINFO
               ;;
             *.ipk)
               # Legacy opkg format: gzipped ar archive.
