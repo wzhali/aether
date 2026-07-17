@@ -1,10 +1,12 @@
 # Aether — OpenWrt 25.12 LuCI Theme
 # Repository root Makefile (consumed by the OpenWrt 25.12 SDK).
 #
-# We deliberately inline the bits of luci.mk we need rather than
-# `include $(TOPDIR)/feeds/luci/luci.mk`, because the SDK does not have
-# that path before `feeds update` runs and `feeds install` rejects any
-# Makefile that fails to parse during its pre-flight dump check.
+# Layout note:
+#   The theme source tree keeps its files under luci/{htdocs,luasrc,uci-defaults}
+#   so the repo stays self-describing, but OpenWrt's stock `Build/Prepare`
+#   only copies the top-level htdocs/luasrc/ucode/root/src directories.
+#   We therefore override `Build/Prepare` to mirror our `luci/` subtree into
+#   the layout the install rule (and the OpenWrt conventions) expect.
 
 include $(TOPDIR)/rules.mk
 
@@ -13,10 +15,6 @@ PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Aether Contributors <noreply@example.com>
-
-# Note: do NOT override PKG_BUILD_DIR — the build system defaults it to
-# $(BUILD_DIR)/$(PKG_NAME), and our install rule already uses $(CURDIR)
-# to reach the source tree, which is more robust than $(PKG_BUILD_DIR).
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,6 +32,13 @@ define Package/luci-theme-aether/description
 A production-grade, enterprise-style LuCI theme for OpenWrt 25.12 with
 visionOS / Material 3 / Fluent inspired visuals, full design tokens,
 modular dashboard widgets and complete offline operation.
+endef
+
+# Mirror our `luci/...` source tree into the layout that OpenWrt's
+# default `Build/Prepare` would have used if files lived at the top level.
+define Build/Prepare
+	mkdir -p $(PKG_BUILD_DIR)
+	$(TAR) -cf - -C . luci | $(TAR) -xf - -C $(PKG_BUILD_DIR)
 endef
 
 define Build/Configure
