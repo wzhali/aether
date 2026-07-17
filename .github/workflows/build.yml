@@ -122,23 +122,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install build deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq zstd file make gcc g++ unzip wget xz-utils \
+            python3 perl tar rsync libncurses5-dev libssl-dev
+
       - name: Fetch OpenWrt 25.12 SDK
         run: |
           set -e
           BASE="https://downloads.openwrt.org/releases/25.12.0/targets"
+          # Map our short target name -> URL sub-path and SDK filename slug.
+          # OpenWrt 25.12 publishes SDKs as .tar.zst, named with toolchain suffix.
           case "${{ inputs.target }}" in
-            x86_64)              T="x86/64" ;;
-            armsr-armv7)         T="armsr/armv7" ;;
-            armsr-armv8)         T="armsr/armv8" ;;
-            mediatek-mt7986)     T="mediatek/mt7986" ;;
-            qualcomm-ipq807x)    T="qualcomm/ipq807x" ;;
-            rockchip-armv8)      T="rockchip/armv8" ;;
+            x86_64)              SUBDIR="x86/64";        SLUG="x86-64" ;;
+            armsr-armv8)         SUBDIR="armsr/armv8";   SLUG="armsr-armv8" ;;
+            mediatek-mt7986)     SUBDIR="mediatek/mt7986"; SLUG="mediatek-mt7986" ;;
+            qualcomm-ipq807x)    SUBDIR="qualcomm/ipq807x"; SLUG="qualcomm-ipq807x" ;;
+            rockchip-armv8)      SUBDIR="rockchip/armv8"; SLUG="rockchip-armv8" ;;
             *) echo "Unknown target ${{ inputs.target }}"; exit 1 ;;
           esac
-          URL="${BASE}/${T}/openwrt-sdk-25.12.0-${T//\//-}_linux-x86_64.tar.xz"
+          URL="${BASE}/${SUBDIR}/openwrt-sdk-25.12.0-${SLUG}_gcc-14.3.0_musl.Linux-x86_64.tar.zst"
+          echo "Fetching $URL"
           mkdir -p sdk && cd sdk
-          wget -q "$URL" -O sdk.tar.xz
-          tar -xJf sdk.tar.xz --strip-components=1
+          wget -q "$URL" -O sdk.tar.zst
+          # Ubuntu runners ship zstd; otherwise `apt-get install -y zstd` first.
+          tar --use-compress-program=unzstd -xf sdk.tar.zst --strip-components=1
           ls
 
       - name: Mount theme
