@@ -1,0 +1,29 @@
+# APK package metadata — consumed by `apk-tools` when building with the
+# OpenWrt 25.12 SDK's APK build path.
+
+pkgname=luci-theme-aether
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Aether — enterprise-style LuCI theme for OpenWrt 25.12"
+url="https://github.com/aether-luci/aether"
+arch="all"
+license="Apache-2.0"
+depends="luci-base"
+source="aether::git+https://github.com/aether-luci/aether.git"
+options="!check"
+
+package() {
+    install -d "$pkgdir"/www/luci-static/aether
+    cp -r "$builddir"/luci/htdocs/luci-static/aether/. \
+        "$pkgdir"/www/luci-static/aether/
+    install -d "$pkgdir"/usr/lib/lua/luci/view/themes/aether
+    cp -r "$builddir"/luci/luasrc/view/themes/aether/. \
+        "$pkgdir"/usr/lib/lua/luci/view/themes/aether/
+    install -d "$pkgdir"/etc/uci-defaults
+    install -m 0755 "$builddir"/luci/uci-defaults/99-luci-theme-aether \
+        "$pkgdir"/etc/uci-defaults/
+}
+
+post_install() {
+    /etc/uci-defaults/99-luci-theme-aether || true
+}

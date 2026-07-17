@@ -1,0 +1,59 @@
+/* =============================================================================
+ * Aether — Notification badge & bell panel
+ * ============================================================================= */
+
+.ae-notify {
+  position: relative;
+  display: inline-flex;
+}
+.ae-notify__badge {
+  position: absolute;
+  inset-block-start: -4px; inset-inline-end: -4px;
+  min-width: 16px; height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--ae-danger);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 2px solid var(--ae-topbar);
+}
+
+.ae-notify__panel {
+  position: absolute;
+  inset-block-start: calc(100% + 6px);
+  inset-inline-end: 0;
+  width: 340px;
+  max-height: 70vh;
+  overflow: auto;
+  background: var(--ae-card);
+  border: 1px solid var(--ae-border);
+  border-radius: var(--ae-radius);
+  box-shadow: var(--ae-shadow-3);
+  padding: var(--ae-spacing-3);
+  z-index: 30;
+  display: none;
+}
+.ae-notify[data-open="true"] .ae-notify__panel { display: block; }
+
+.ae-notify__item {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: var(--ae-spacing-3);
+  padding: var(--ae-spacing-3);
+  border-radius: var(--ae-radius-sm);
+  font-size: var(--ae-text-sm);
+  color: var(--ae-text-1);
+}
+.ae-notify__item + .ae-notify__item { margin-block-start: 4px; }
+.ae-notify__item:hover { background: var(--ae-hover); }
+.ae-notify__icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: grid; place-items: center;
+  background: var(--ae-info-soft); color: var(--ae-info);
+}
+.ae-notify__icon--warn { background: var(--ae-warning-soft); color: var(--ae-warning); }
+.ae-notify__icon--err  { background: var(--ae-danger-soft);  color: var(--ae-danger); }
+.ae-notify__time { color: var(--ae-text-3); font-size: var(--ae-text-xs); }

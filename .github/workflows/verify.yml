@@ -1,0 +1,68 @@
+name: Verify
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Lint + Preview + Screenshots
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install stylelint
+        run: npm install --no-audit --no-fund --silent stylelint@16.10.0 stylelint-config-standard@36.0.1
+
+      - name: Self-check
+        run: bash scripts/selftest.sh
+
+      - name: Stylelint
+        run: npx stylelint "luci/htdocs/luci-static/aether/css/**/*.css"
+
+      - name: Generate preview
+        run: python3 scripts/preview.py dist/preview
+
+      - name: Install Playwright
+        run: |
+          pip install --quiet playwright
+          playwright install --with-deps chromium
+
+      - name: Capture screenshots
+        run: python3 scripts/screenshot.py dist/preview dist/screenshots
+
+      - name: Upload preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview
+          path: dist/preview
+          if-no-files-found: error
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: dist/screenshots
+          if-no-files-found: error
+
+  build-sdk:
+    name: SDK build (x86_64)
+    needs: verify
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    uses: ./.github/workflows/build.yml
+    with:
+      target: x86_64

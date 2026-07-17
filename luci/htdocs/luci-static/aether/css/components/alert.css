@@ -1,0 +1,110 @@
+/* =============================================================================
+ * Aether — Alerts, Notifications, Toasts, Pills
+ * ============================================================================= */
+
+.ae-alert {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  gap: var(--ae-spacing-3);
+  align-items: start;
+  padding: var(--ae-spacing-3) var(--ae-spacing-4);
+  border-radius: var(--ae-radius);
+  background: var(--ae-surface-2);
+  border: 1px solid var(--ae-border);
+  color: var(--ae-text-1);
+  font-size: var(--ae-text-sm);
+  box-shadow: var(--ae-shadow-1);
+}
+
+.ae-alert__icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px;
+  color: var(--ae-info);
+}
+.ae-alert__title {
+  margin: 0 0 2px;
+  font-weight: 600;
+  font-size: var(--ae-text-sm);
+}
+.ae-alert__body  { color: var(--ae-text-2); }
+.ae-alert__close {
+  background: transparent;
+  border: 0;
+  color: var(--ae-text-3);
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 2px;
+}
+.ae-alert__close:hover { background: var(--ae-hover); color: var(--ae-text-1); }
+
+.ae-alert--info    { background: var(--ae-info-soft);    border-color: color-mix(in srgb, var(--ae-info) 30%, transparent); }
+.ae-alert--info .ae-alert__icon    { color: var(--ae-info); }
+.ae-alert--success { background: var(--ae-success-soft); border-color: color-mix(in srgb, var(--ae-success) 30%, transparent); }
+.ae-alert--success .ae-alert__icon { color: var(--ae-success); }
+.ae-alert--warning { background: var(--ae-warning-soft); border-color: color-mix(in srgb, var(--ae-warning) 30%, transparent); }
+.ae-alert--warning .ae-alert__icon { color: var(--ae-warning); }
+.ae-alert--danger  { background: var(--ae-danger-soft);  border-color: color-mix(in srgb, var(--ae-danger) 30%, transparent); }
+.ae-alert--danger .ae-alert__icon  { color: var(--ae-danger); }
+
+.ae-alert--bare {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding-inline-start: 0;
+}
+
+/* ---- Pills ---- */
+.ae-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: var(--ae-text-xs);
+  font-weight: 500;
+  background: var(--ae-surface-2);
+  color: var(--ae-text-2);
+  border: 1px solid var(--ae-border);
+}
+.ae-pill .ae-icon { width: 12px; height: 12px; }
+
+.ae-pill--primary { background: var(--ae-primary-soft); color: var(--ae-primary-strong); border-color: transparent; }
+.ae-pill--accent  { background: var(--ae-accent-soft);  color: var(--ae-accent-strong);  border-color: transparent; }
+.ae-pill--success { background: var(--ae-success-soft); color: var(--ae-success); border-color: transparent; }
+.ae-pill--warning { background: var(--ae-warning-soft); color: var(--ae-warning); border-color: transparent; }
+.ae-pill--danger  { background: var(--ae-danger-soft);  color: var(--ae-danger);  border-color: transparent; }
+.ae-pill--info    { background: var(--ae-info-soft);    color: var(--ae-info);    border-color: transparent; }
+
+/* ---- Toast container ---- */
+.ae-toasts {
+  position: fixed;
+  inset-block-end: var(--ae-spacing-5);
+  inset-inline-end: var(--ae-spacing-5);
+  display: flex; flex-direction: column; gap: var(--ae-spacing-2);
+  z-index: 1000;
+  pointer-events: none;
+}
+.ae-toast {
+  pointer-events: auto;
+  min-width: 280px; max-width: 380px;
+  padding: var(--ae-spacing-3) var(--ae-spacing-4);
+  background: var(--ae-card);
+  border: 1px solid var(--ae-border);
+  border-radius: var(--ae-radius);
+  box-shadow: var(--ae-shadow-3);
+  animation: aeToastIn var(--ae-duration) var(--ae-easing-out);
+}
+@keyframes aeToastIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Banner ---- */
+.ae-banner {
+  display: flex; align-items: center; gap: var(--ae-spacing-3);
+  padding: var(--ae-spacing-3) var(--ae-spacing-4);
+  background: var(--ae-warning-soft);
+  color: var(--ae-text-1);
+  border-block-end: 1px solid var(--ae-border);
+  font-size: var(--ae-text-sm);
+}

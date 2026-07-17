@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" width="1440" height="900">
+  <rect width="1440" height="900" fill="#F2F2F7"/>
+  <rect x="0" y="0" width="260" height="900" fill="#FFFFFF" stroke="#E5E5EA"/>
+  <rect x="0" y="0" width="1440" height="56" fill="#FFFFFF" stroke="#E5E5EA"/>
+  <text x="48" y="36" font-family="Inter" font-size="18" fill="#1C1C1E" font-weight="600">Aether</text>
+  <g font-family="Inter" fill="#3C3C43">
+    <text x="296" y="100" font-size="28" font-weight="600" fill="#1C1C1E">Overview</text>
+    <text x="296" y="124" font-size="14" fill="#6E6E73">Real-time status of your network.</text>
+  </g>
+  <g>
+    <rect x="296" y="160" width="200" height="100" rx="12" fill="#FFFFFF" stroke="#E5E5EA"/>
+    <rect x="512" y="160" width="200" height="100" rx="12" fill="#FFFFFF" stroke="#E5E5EA"/>
+    <rect x="728" y="160" width="200" height="100" rx="12" fill="#FFFFFF" stroke="#E5E5EA"/>
+    <rect x="944" y="160" width="200" height="100" rx="12" fill="#FFFFFF" stroke="#E5E5EA"/>
+  </g>
+  <text x="48" y="800" font-family="Inter" font-size="12" fill="#98989F">Replace this file with a real screenshot</text>
+</svg>

@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to release (e.g. v1.0.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-matrix:
+    name: Build ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { target: x86_64,           arch: x86_64 }
+          - { target: armsr-armv8,      arch: aarch64_cortex-a53 }
+          - { target: mediatek-mt7986,  arch: aarch64_cortex-a53 }
+          - { target: qualcomm-ipq807x, arch: aarch64_cortex-a53 }
+          - { target: rockchip-armv8,   arch: aarch64_cortex-a53 }
+    uses: ./.github/workflows/build.yml
+    with:
+      target: ${{ matrix.target }}
+
+  package:
+    name: Assemble release
+    needs: build-matrix
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Determine tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checksums
+        run: |
+          cd dist
+          find . -name '*.ipk' -exec sha256sum {} \; > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: Aether ${{ steps.tag.outputs.tag }}
+          body: |
+            Aether ${{ steps.tag.outputs.tag }} — premium LuCI theme for OpenWrt 25.12.
+            See the [changelog](../blob/${{ steps.tag.outputs.tag }}/docs/CHANGELOG.md) for details.
+          files: |
+            dist/**/*.ipk
+            dist/SHA256SUMS
+          fail_on_unmatched_files: false

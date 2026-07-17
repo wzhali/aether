@@ -1,0 +1,133 @@
+/* =============================================================================
+ * Aether — Compatibility layer for LuCI .cbi-* legacy views.
+ * Bridges stock LuCI form/table markup into the Aether design system.
+ * Scope is intentionally narrow: only what LuCI 25.12 ships.
+ * ============================================================================= */
+
+.cbi-section,
+.cbi-section-node {
+  background: var(--ae-card);
+  border: 1px solid var(--ae-border);
+  border-radius: var(--ae-radius);
+  padding: var(--ae-spacing-5);
+  box-shadow: var(--ae-shadow-1);
+  margin-block-end: var(--ae-spacing-4);
+}
+.cbi-section + .cbi-section,
+.cbi-section-node + .cbi-section-node { margin-block-start: var(--ae-spacing-4); }
+
+.cbi-section h2,
+.cbi-section h3,
+.cbi-section-node h2,
+.cbi-section-node h3 {
+  margin: 0 0 var(--ae-spacing-4);
+  font-size: var(--ae-text-lg);
+  font-weight: 600;
+}
+
+.cbi-map-description {
+  color: var(--ae-text-3);
+  font-size: var(--ae-text-sm);
+  margin-block-end: var(--ae-spacing-3);
+}
+
+table.cbi,
+.cbi-map {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--ae-text-sm);
+}
+
+.cbi-map th,
+.cbi-map td {
+  text-align: start;
+  padding: 12px 16px;
+  border-block-end: 1px solid var(--ae-divider);
+}
+
+.cbi-map th {
+  font-weight: 500;
+  font-size: var(--ae-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ae-text-3);
+}
+
+.cbi-value-field input[type="text"],
+.cbi-value-field input[type="password"],
+.cbi-value-field input[type="number"],
+.cbi-value-field input[type="email"],
+.cbi-value-field select,
+.cbi-value-field textarea {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: var(--ae-radius-sm);
+  border: 1px solid var(--ae-border-strong);
+  background: var(--ae-surface);
+  color: var(--ae-text-1);
+  font: inherit;
+  transition: border-color var(--ae-duration-fast) var(--ae-easing),
+              box-shadow   var(--ae-duration-fast) var(--ae-easing);
+}
+.cbi-value-field input:focus,
+.cbi-value-field select:focus,
+.cbi-value-field textarea:focus {
+  border-color: var(--ae-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ae-primary) 25%, transparent);
+  outline: none;
+}
+
+.cbi-button {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: var(--ae-radius-sm);
+  background: var(--ae-primary);
+  color: var(--ae-primary-contrast);
+  border: 0;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--ae-duration-fast) var(--ae-easing);
+}
+.cbi-button:hover { background: var(--ae-primary-strong); }
+.cbi-button.important { background: var(--ae-danger); }
+.cbi-button.important:hover { background: color-mix(in srgb, var(--ae-danger) 85%, #000 15%); }
+.cbi-button[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+.cbi-section-table { display: block; overflow-x: auto; }
+
+.cbi-value-help,
+.cbi-value-description {
+  display: block;
+  margin-block-start: 4px;
+  font-size: var(--ae-text-xs);
+  color: var(--ae-text-3);
+}
+
+.cbi-value-error {
+  color: var(--ae-danger);
+  font-size: var(--ae-text-xs);
+}
+
+/* Status indicators */
+.cbi-section-status,
+.cbi-value-field .cbi-status {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: var(--ae-text-xs);
+  color: var(--ae-text-3);
+}
+
+/* Save / Apply bar */
+.cbi-page-actions {
+  position: sticky;
+  inset-block-end: 0;
+  display: flex; gap: var(--ae-spacing-2);
+  padding: var(--ae-spacing-3) var(--ae-spacing-4);
+  margin-block-start: var(--ae-spacing-5);
+  background: var(--ae-card);
+  border: 1px solid var(--ae-border);
+  border-radius: var(--ae-radius);
+  box-shadow: var(--ae-shadow-2);
+}

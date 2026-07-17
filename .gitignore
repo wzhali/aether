@@ -1,0 +1,14 @@
+# Build artefacts
+dist/
+node_modules/
+package-lock.json
+*.log
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Local previews / ipks
+*.ipk
+sdk/

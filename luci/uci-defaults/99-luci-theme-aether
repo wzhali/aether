@@ -1,0 +1,30 @@
+#!/bin/sh
+# Register Aether with LuCI on first install. Idempotent.
+
+. /lib/functions.sh
+
+register_aether() {
+    local cfg="/etc/config/luci"
+
+    # Ensure the `luci` main section exists.
+    uci -q get luci.main >/dev/null || uci add luci main
+
+    # Set Aether as the active theme only if none is configured yet.
+    local current
+    current=$(uci -q get luci.main.mediaurlbase 2>/dev/null || true)
+    if [ -z "$current" ]; then
+        uci set luci.main.mediaurlbase='/luci-static/aether'
+        uci commit luci
+    fi
+
+    # Register the theme itself.
+    uci -q get luci.themes >/dev/null || {
+        uci add luci themes
+        uci rename luci.@themes[-1]=aether
+        uci set luci.aether='/luci-static/aether'
+        uci commit luci
+    }
+}
+
+register_aether
+exit 0

@@ -1,0 +1,44 @@
+<%#
+  Aether theme shell — `theme.htm` is rendered by LuCI dispatcher on every page.
+  We keep it lightweight: it injects CSS, font preloads and the JS bootstrap.
+%>
+<%
+    local sys  = require "luci.sys"
+    local http = require "luci.http"
+    local hostname = sys.hostname() or "OpenWrt"
+
+    http.prepare_content("text/html; charset=UTF-8")
+%>
+<!DOCTYPE html>
+<html lang="<%=luci.i18n.context.lang%>" data-theme="auto">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="Aether — LuCI Theme for OpenWrt 25.12">
+    <title><%=hostname%> · Aether</title>
+
+    <!-- Theme runtime hint to avoid FOUC. -->
+    <script>
+    (function(){
+        try {
+            var t = localStorage.getItem("aether:theme");
+            if (!t || t === "auto") t = "auto";
+            document.documentElement.setAttribute("data-theme", t);
+        } catch (_) {
+            document.documentElement.setAttribute("data-theme", "auto");
+        }
+    })();
+    </script>
+
+    <link rel="preload" href="<%=media%>/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<%=media%>/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="<%=media%>/css/aether.css">
+    <link rel="icon" href="<%=media%>/img/logo.svg" type="image/svg+xml">
+</head>
+<body>
+<%+header%>
+<%+footer%>
+<script type="module" src="<%=media%>/js/aether.js"></script>
+</body>
+</html>

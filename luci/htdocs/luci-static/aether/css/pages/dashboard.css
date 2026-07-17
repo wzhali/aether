@@ -1,0 +1,121 @@
+/* =============================================================================
+ * Aether — Dashboard
+ * ============================================================================= */
+
+.ae-dashboard {
+  display: grid;
+  gap: var(--ae-spacing-5);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.ae-widget { grid-column: span 12; }
+
+@media (min-width: 640px) {
+  .ae-widget--stat  { grid-column: span 6; }
+  .ae-widget--cpu   { grid-column: span 8; }
+  .ae-widget--mem   { grid-column: span 4; }
+  .ae-widget--disk  { grid-column: span 4; }
+  .ae-widget--temp  { grid-column: span 4; }
+  .ae-widget--uptime{ grid-column: span 4; }
+  .ae-widget--wan   { grid-column: span 8; }
+  .ae-widget--topo  { grid-column: span 4; }
+  .ae-widget--ipv4  { grid-column: span 4; }
+  .ae-widget--ipv6  { grid-column: span 4; }
+  .ae-widget--vpn   { grid-column: span 4; }
+  .ae-widget--wifi  { grid-column: span 6; }
+  .ae-widget--clients{grid-column: span 6; }
+  .ae-widget--updates{grid-column: span 12; }
+}
+
+@media (min-width: 1024px) {
+  .ae-widget--stat  { grid-column: span 3; }
+  .ae-widget--cpu   { grid-column: span 8; }
+  .ae-widget--mem   { grid-column: span 4; }
+  .ae-widget--wan   { grid-column: span 8; }
+  .ae-widget--topo  { grid-column: span 4; }
+}
+
+/* Stat row */
+.ae-stat-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--ae-spacing-3);
+}
+.ae-stat-row + .ae-stat-row { margin-block-start: var(--ae-spacing-3); padding-block-start: var(--ae-spacing-3); border-block-start: 1px dashed var(--ae-divider); }
+
+/* Network topology visual */
+.ae-topology {
+  position: relative;
+  height: 280px;
+  background:
+    radial-gradient(circle at center, var(--ae-surface-2) 1px, transparent 1px) 0 0/16px 16px;
+  border-radius: var(--ae-radius-sm);
+  overflow: hidden;
+}
+.ae-topology__node {
+  position: absolute;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-size: var(--ae-text-xs);
+  color: var(--ae-text-2);
+  transform: translate(-50%, -50%);
+}
+.ae-topology__icon {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--ae-card);
+  border: 2px solid var(--ae-border-strong);
+  display: grid; place-items: center;
+  color: var(--ae-primary);
+  box-shadow: var(--ae-shadow-1);
+}
+.ae-topology__icon--online { border-color: var(--ae-success); color: var(--ae-success); }
+.ae-topology__icon--off    { border-color: var(--ae-danger);  color: var(--ae-danger); }
+
+.ae-topology svg.lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.ae-topology svg.lines path { stroke: var(--ae-border-strong); fill: none; stroke-width: 1.5; }
+
+/* Clients list */
+.ae-clients {
+  display: grid; gap: var(--ae-spacing-2);
+}
+.ae-client {
+  display: grid;
+  grid-template-columns: 28px 1fr auto auto;
+  gap: var(--ae-spacing-3);
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: var(--ae-radius-sm);
+  background: var(--ae-surface-2);
+  font-size: var(--ae-text-sm);
+}
+.ae-client__avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--ae-primary-soft);
+  color: var(--ae-primary);
+  display: grid; place-items: center;
+  font-weight: 600;
+}
+.ae-client__rate { font-family: var(--ae-font-mono); font-size: var(--ae-text-xs); color: var(--ae-text-3); }
+
+/* Updates list */
+.ae-updates {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: var(--ae-spacing-3);
+  padding: 10px 14px;
+  align-items: center;
+  border-radius: var(--ae-radius-sm);
+  background: var(--ae-surface-2);
+}
+.ae-updates + .ae-updates { margin-block-start: 6px; }
+.ae-updates__name  { font-weight: 500; }
+.ae-updates__from  { font-family: var(--ae-font-mono); color: var(--ae-text-3); font-size: var(--ae-text-xs); }
+.ae-updates__to    { font-family: var(--ae-font-mono); color: var(--ae-success); font-size: var(--ae-text-xs); }
+
+/* Realtime chart wrapper */
+.ae-realtime {
+  position: relative;
+  height: 240px;
+}

@@ -1,0 +1,202 @@
+<%#
+  Aether theme Settings page (in-app).
+%>
+<%+header%>
+<section class="ae-page-head">
+    <div>
+        <h1 class="ae-page-head__title"><%:Aether Theme%></h1>
+        <p class="ae-page-head__sub"><%:Tune the visual experience to match your environment.%></p>
+    </div>
+</section>
+
+<div class="ae-settings">
+
+    <nav class="ae-settings__nav" aria-label="<%:Settings sections%>">
+        <a href="#appearance" aria-current="true"><%:Appearance%></a>
+        <a href="#sidebar"><%:Sidebar%></a>
+        <a href="#wallpaper"><%:Wallpaper%></a>
+        <a href="#widgets"><%:Widgets%></a>
+        <a href="#about"><%:About%></a>
+    </nav>
+
+    <div>
+        <section class="ae-settings__section" id="appearance">
+            <h2><%:Appearance%></h2>
+
+            <div class="ae-settings__row">
+                <div>
+                    <div class="ae-settings__row-label"><%:Theme%></div>
+                    <div class="ae-settings__row-hint"><%:Auto follows your system preference.%></div>
+                </div>
+                <div class="ae-btn-group" role="tablist" aria-label="<%:Theme%>">
+                    <button class="ae-btn" aria-pressed="true" data-theme-set="auto">Auto</button>
+                    <button class="ae-btn" data-theme-set="light">Light</button>
+                    <button class="ae-btn" data-theme-set="dark">Dark</button>
+                    <button class="ae-btn" data-theme-set="hc">HC</button>
+                </div>
+            </div>
+
+            <div class="ae-settings__row">
+                <div>
+                    <div class="ae-settings__row-label"><%:Density%></div>
+                    <div class="ae-settings__row-hint"><%:More compact rows for small screens.%></div>
+                </div>
+                <div class="ae-btn-group" role="tablist">
+                    <button class="ae-btn" aria-pressed="true" data-density-set="comfortable">Comfortable</button>
+                    <button class="ae-btn" data-density-set="compact">Compact</button>
+                </div>
+            </div>
+
+            <div class="ae-settings__row">
+                <div>
+                    <div class="ae-settings__row-label"><%:Primary color%></div>
+                    <div class="ae-settings__row-hint"><%:Used for buttons, links and the brand mark.%></div>
+                </div>
+                <div class="ae-color-swatches" role="group" aria-label="<%:Primary color%>">
+                    <button class="ae-color-swatch" style="background:#0A84FF" aria-pressed="true" data-primary="#0A84FF"></button>
+                    <button class="ae-color-swatch" style="background:#5856D6" data-primary="#5856D6"></button>
+                    <button class="ae-color-swatch" style="background:#34C759" data-primary="#34C759"></button>
+                    <button class="ae-color-swatch" style="background:#FF9500" data-primary="#FF9500"></button>
+                    <button class="ae-color-swatch" style="background:#FF2D55" data-primary="#FF2D55"></button>
+                </div>
+            </div>
+
+            <div class="ae-settings__row">
+                <div>
+                    <div class="ae-settings__row-label"><%:Accent color%></div>
+                    <div class="ae-settings__row-hint"><%:Used for highlights and decorative accents.%></div>
+                </div>
+                <div class="ae-color-swatches">
+                    <button class="ae-color-swatch" style="background:#BF5AF2" aria-pressed="true" data-accent="#BF5AF2"></button>
+                    <button class="ae-color-swatch" style="background:#FF375F" data-accent="#FF375F"></button>
+                    <button class="ae-color-swatch" style="background:#FFD60A" data-accent="#FFD60A"></button>
+                    <button class="ae-color-swatch" style="background:#5AC8FA" data-accent="#5AC8FA"></button>
+                </div>
+            </div>
+
+            <div class="ae-settings__row">
+                <div>
+                    <div class="ae-settings__row-label"><%:Card radius%></div>
+                    <div class="ae-settings__row-hint"><%:0 = sharp corners, 24 = very soft.%></div>
+                </div>
+                <input class="ae-input ae-input--sm" type="range" min="0" max="24" value="12" data-radius>
+            </div>
+
+            <div class="ae-settings__row">
+                <div>
+                    <div class="ae-settings__row-label"><%:Font size scale%></div>
+                    <div class="ae-settings__row-hint"><%:0.85 – 1.40 multiplier.%></div>
+                </div>
+                <input class="ae-input ae-input--sm" type="range" min="0.85" max="1.4" step="0.05" value="1" data-font-scale>
+            </div>
+
+            <div class="ae-settings__row">
+                <div>
+                    <div class="ae-settings__row-label"><%:Glass effect%></div>
+                    <div class="ae-settings__row-hint"><%:Translucent sidebar & topbar.%></div>
+                </div>
+                <label class="ae-switch"><input type="checkbox" checked data-glass><span class="ae-switch__track"></span><span class="ae-switch__thumb"></span></label>
+            </div>
+
+            <div class="ae-settings__row">
+                <div>
+                    <div class="ae-settings__row-label"><%:Blur strength%></div>
+                    <div class="ae-settings__row-hint"><%:0 – 60 pixels.%></div>
+                </div>
+                <input class="ae-input ae-input--sm" type="range" min="0" max="60" value="24" data-blur>
+            </div>
+        </section>
+
+        <section class="ae-settings__section" id="sidebar">
+            <h2><%:Sidebar%></h2>
+            <div class="ae-settings__row">
+                <div>
+                    <div class="ae-settings__row-label"><%:Style%></div>
+                    <div class="ae-settings__row-hint"><%:Overlay mimics a mobile drawer.%></div>
+                </div>
+                <div class="ae-btn-group">
+                    <button class="ae-btn" aria-pressed="true" data-sidebar-set="expanded">Expanded</button>
+                    <button class="ae-btn" data-sidebar-set="collapsed">Collapsed</button>
+                    <button class="ae-btn" data-sidebar-set="overlay">Overlay</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="ae-settings__section" id="wallpaper">
+            <h2><%:Wallpaper%></h2>
+            <div class="ae-wallpapers">
+                <button class="ae-wallpaper" style="background-image:url('<%=media%>/img/wallpaper-light.svg')" data-wallpaper="auto" aria-pressed="true"></button>
+                <button class="ae-wallpaper" style="background-image:url('<%=media%>/img/wallpaper-dark.svg')" data-wallpaper="aurora"></button>
+                <button class="ae-wallpaper" style="background:linear-gradient(135deg,#0A84FF,#BF5AF2)" data-wallpaper="mesh"></button>
+                <button class="ae-wallpaper" style="background:var(--ae-surface-2)" data-wallpaper="none"></button>
+            </div>
+        </section>
+
+        <section class="ae-settings__section" id="widgets">
+            <h2><%:Dashboard Widgets%></h2>
+            <div class="ae-widget-toggles">
+                <label class="ae-check"><input type="checkbox" checked data-widget="cpu"><%:CPU%></label>
+                <label class="ae-check"><input type="checkbox" checked data-widget="mem"><%:Memory%></label>
+                <label class="ae-check"><input type="checkbox" checked data-widget="temp"><%:Temperature%></label>
+                <label class="ae-check"><input type="checkbox" checked data-widget="disk"><%:Disk%></label>
+                <label class="ae-check"><input type="checkbox" checked data-widget="wan"><%:WAN%></label>
+                <label class="ae-check"><input type="checkbox" checked data-widget="topo"><%:Topology%></label>
+                <label class="ae-check"><input type="checkbox" checked data-widget="ipv4"><%:IPv4%></label>
+                <label class="ae-check"><input type="checkbox" checked data-widget="ipv6"><%:IPv6%></label>
+                <label class="ae-check"><input type="checkbox" checked data-widget="vpn"><%:VPN%></label>
+                <label class="ae-check"><input type="checkbox" checked data-widget="wifi"><%:Wireless%></label>
+                <label class="ae-check"><input type="checkbox" checked data-widget="clients"><%:Clients%></label>
+                <label class="ae-check"><input type="checkbox" checked data-widget="updates"><%:Updates%></label>
+                <label class="ae-check"><input type="checkbox" checked data-widget="uptime"><%:Uptime%></label>
+            </div>
+        </section>
+
+        <section class="ae-settings__section" id="about">
+            <h2><%:About Aether%></h2>
+            <p>Aether is a premium LuCI theme for OpenWrt 25.12, built with design tokens, modular widgets and complete offline operation.</p>
+            <p class="ae-mute ae-mono">v1.0.0 · Apache-2.0</p>
+        </section>
+    </div>
+</div>
+
+<script type="module">
+import { aetherTheme } from "<%=media%>/js/theme.js";
+const root = document.documentElement;
+const shell = document.getElementById("ae-shell");
+
+document.querySelectorAll("[data-theme-set]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-theme-set]").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+    aetherTheme.set({ theme: b.dataset.themeSet });
+}));
+document.querySelectorAll("[data-density-set]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-density-set]").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+    aetherTheme.set({ density: b.dataset.densitySet });
+}));
+document.querySelectorAll("[data-sidebar-set]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-sidebar-set]").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+    aetherTheme.set({ sidebar: b.dataset.sidebarSet });
+}));
+document.querySelectorAll("[data-primary]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-primary]").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+    aetherTheme.set({ primary: b.dataset.primary });
+}));
+document.querySelectorAll("[data-accent]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-accent]").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+    aetherTheme.set({ accent: b.dataset.accent });
+}));
+document.querySelector("[data-radius]").addEventListener("input", e => aetherTheme.set({ radius: Number(e.target.value) }));
+document.querySelector("[data-font-scale]").addEventListener("input", e => aetherTheme.set({ fontScale: Number(e.target.value) }));
+document.querySelector("[data-blur]").addEventListener("input", e => aetherTheme.set({ blur: Number(e.target.value) }));
+document.querySelector("[data-glass]").addEventListener("change", e => aetherTheme.set({ glass: e.target.checked }));
+document.querySelectorAll("[data-wallpaper]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-wallpaper]").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+    aetherTheme.set({ wallpaper: b.dataset.wallpaper });
+}));
+document.querySelectorAll("[data-widget]").forEach(c => c.addEventListener("change", () => {
+    const widgets = aetherTheme.get().widgets;
+    widgets[c.dataset.widget] = c.checked;
+    aetherTheme.set({ widgets });
+}));
+</script>
+
+<%+footer%>

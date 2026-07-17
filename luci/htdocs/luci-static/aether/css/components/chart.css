@@ -1,0 +1,53 @@
+/* =============================================================================
+ * Aether — Charts (pure SVG/CSS, no JS deps)
+ * ============================================================================= */
+
+.ae-chart {
+  width: 100%;
+  display: block;
+  font-family: var(--ae-font-sans);
+}
+
+.ae-chart__title {
+  margin: 0 0 var(--ae-spacing-3);
+  font-size: var(--ae-text-md);
+  font-weight: 600;
+}
+
+.ae-chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ae-spacing-3);
+  font-size: var(--ae-text-xs);
+  color: var(--ae-text-3);
+}
+.ae-chart__legend span {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.ae-chart__legend i {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  background: currentcolor;
+}
+
+/* Axis / grid */
+.ae-chart .grid line { stroke: var(--ae-divider); stroke-width: 1; }
+.ae-chart .axis text { fill: var(--ae-text-3); font-size: 10px; }
+.ae-chart .axis line, .ae-chart .axis path { stroke: var(--ae-border); }
+
+/* Bars */
+.ae-chart rect.bar {
+  fill: var(--ae-primary);
+  rx: 4;
+  transition: fill var(--ae-duration-fast) var(--ae-easing);
+}
+.ae-chart rect.bar:hover { fill: var(--ae-primary-strong); }
+
+/* Lines */
+.ae-chart path.line { fill: none; stroke-width: 1.75; stroke-linejoin: round; stroke-linecap: round; }
+.ae-chart path.area { fill: var(--ae-primary-soft); }
+
+/* Donut */
+.ae-chart .donut-ring { fill: none; stroke-width: 18; }
+.ae-chart .donut-text { fill: var(--ae-text-1); font-weight: 600; }

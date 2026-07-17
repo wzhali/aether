@@ -1,0 +1,250 @@
+<%#
+  Aether dashboard page — used as the default Overview page.
+%>
+<%+header%>
+<section class="ae-page-head">
+    <div>
+        <h1 class="ae-page-head__title"><%:Overview%></h1>
+        <p class="ae-page-head__sub"><%:Real-time status of your network.%></p>
+    </div>
+    <div class="ae-row">
+        <button class="ae-btn" data-action="theme-cycle" aria-label="<%:Cycle theme%>">
+            <svg class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-contrast"/></svg>
+            <span><%:Theme%></span>
+        </button>
+        <button class="ae-btn ae-btn--primary">
+            <svg class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-refresh"/></svg>
+            <span><%:Refresh%></span>
+        </button>
+    </div>
+</section>
+
+<div class="ae-dashboard">
+
+    <article class="ae-card ae-widget--stat ae-widget" data-widget="cpu">
+        <div class="ae-stat-row">
+            <div class="ae-stat">
+                <span class="ae-stat__label"><%:CPU%></span>
+                <span class="ae-stat__value" data-bind="cpu-pct">—</span>
+            </div>
+            <div class="ae-ring" style="--_size:64px;--_thickness:6px;">
+                <span class="ae-ring__value" data-bind="cpu-pct">—</span>
+            </div>
+        </div>
+        <div class="ae-progress ae-progress--sm" style="margin-top:12px">
+            <div class="ae-progress__fill" style="width:0%"></div>
+        </div>
+    </article>
+
+    <article class="ae-card ae-widget--stat ae-widget" data-widget="mem">
+        <div class="ae-stat-row">
+            <div class="ae-stat">
+                <span class="ae-stat__label"><%:Memory%></span>
+                <span class="ae-stat__value" data-bind="mem-pct">—</span>
+            </div>
+            <div class="ae-ring" style="--_size:64px;--_thickness:6px;">
+                <span class="ae-ring__value" data-bind="mem-pct">—</span>
+            </div>
+        </div>
+        <div class="ae-mute" data-bind="mem-sub" style="font-size:12px;margin-top:4px">— / —</div>
+        <div class="ae-progress ae-progress--sm" style="margin-top:8px">
+            <div class="ae-progress__fill" style="width:0%"></div>
+        </div>
+    </article>
+
+    <article class="ae-card ae-widget--stat ae-widget" data-widget="temp">
+        <div class="ae-stat-row">
+            <div class="ae-stat">
+                <span class="ae-stat__label"><%:Temperature%></span>
+                <span class="ae-stat__value">47.2<small style="font-size:14px;color:var(--ae-text-3);margin-left:4px">°C</small></span>
+            </div>
+            <span class="ae-stat__icon ae-stat__icon--warning">
+                <svg class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-thermometer"/></svg>
+            </span>
+        </div>
+        <svg class="ae-sparkline" data-bind="temp-spark"></svg>
+    </article>
+
+    <article class="ae-card ae-widget--stat ae-widget" data-widget="disk">
+        <div class="ae-stat-row">
+            <div class="ae-stat">
+                <span class="ae-stat__label"><%:Storage%></span>
+                <span class="ae-stat__value">12.8<small style="font-size:14px;color:var(--ae-text-3);margin-left:4px">GB</small></span>
+            </div>
+            <span class="ae-stat__icon ae-stat__icon--accent">
+                <svg class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-hard-drive"/></svg>
+            </span>
+        </div>
+        <div class="ae-progress ae-progress--sm" style="margin-top:12px">
+            <div class="ae-progress__fill" style="width:38%"></div>
+        </div>
+        <div class="ae-mute" style="font-size:12px;margin-top:4px">38% of 32 GB used</div>
+    </article>
+
+    <article class="ae-card ae-widget ae-widget--wan" data-widget="wan">
+        <header class="ae-card__head">
+            <h3 class="ae-card__title"><%:WAN Traffic%></h3>
+            <span class="ae-pill ae-pill--success"><span class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-globe"/></span><%:Online%></span>
+        </header>
+        <div class="ae-grid" style="grid-template-columns:repeat(2,1fr)">
+            <div>
+                <div class="ae-stat__label"><%:Download%></div>
+                <div class="ae-stat__value" data-bind="wan-rx">—</div>
+            </div>
+            <div>
+                <div class="ae-stat__label"><%:Upload%></div>
+                <div class="ae-stat__value" data-bind="wan-tx">—</div>
+            </div>
+        </div>
+        <div class="ae-realtime" style="margin-top:16px">
+            <svg class="ae-chart" viewBox="0 0 100 40" preserveAspectRatio="none">
+                <path class="line" stroke="var(--ae-primary)" d="M0,30 L10,28 L20,24 L30,30 L40,22 L50,18 L60,14 L70,16 L80,12 L90,8 L100,10" />
+                <path class="area" d="M0,30 L10,28 L20,24 L30,30 L40,22 L50,18 L60,14 L70,16 L80,12 L90,8 L100,10 L100,40 L0,40 Z" />
+            </svg>
+        </div>
+    </article>
+
+    <article class="ae-card ae-widget ae-widget--topo" data-widget="topo">
+        <header class="ae-card__head">
+            <h3 class="ae-card__title"><%:Network Topology%></h3>
+        </header>
+        <div class="ae-topology">
+            <svg class="lines" viewBox="0 0 200 140">
+                <path d="M100 30 L40 100"/><path d="M100 30 L160 100"/><path d="M100 30 L100 110"/>
+            </svg>
+            <div class="ae-topology__node" style="left:50%;top:18%">
+                <div class="ae-topology__icon ae-topology__icon--online">
+                    <svg class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-router"/></svg>
+                </div>
+                <span><%:Gateway%></span>
+            </div>
+            <div class="ae-topology__node" style="left:20%;top:78%">
+                <div class="ae-topology__icon ae-topology__icon--online">
+                    <svg class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-wifi"/></svg>
+                </div>
+                <span>2.4G</span>
+            </div>
+            <div class="ae-topology__node" style="left:80%;top:78%">
+                <div class="ae-topology__icon ae-topology__icon--online">
+                    <svg class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-wifi"/></svg>
+                </div>
+                <span>5G</span>
+            </div>
+            <div class="ae-topology__node" style="left:50%;top:88%">
+                <div class="ae-topology__icon">
+                    <svg class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-network"/></svg>
+                </div>
+                <span><%:LAN%></span>
+            </div>
+        </div>
+    </article>
+
+    <article class="ae-card ae-widget ae-widget--ipv4" data-widget="ipv4">
+        <div class="ae-stat-row">
+            <div class="ae-stat">
+                <span class="ae-stat__label"><%:IPv4%></span>
+                <span class="ae-stat__value ae-mono">203.0.113.42</span>
+            </div>
+            <span class="ae-stat__icon"><svg class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-globe"/></svg></span>
+        </div>
+        <div class="ae-mute" style="font-size:12px;margin-top:4px">WAN · DHCP · 18h 22m</div>
+    </article>
+
+    <article class="ae-card ae-widget ae-widget--ipv6" data-widget="ipv6">
+        <div class="ae-stat-row">
+            <div class="ae-stat">
+                <span class="ae-stat__label"><%:IPv6%></span>
+                <span class="ae-stat__value ae-mono">2001:db8::42</span>
+            </div>
+            <span class="ae-stat__icon ae-stat__icon--accent"><svg class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-globe"/></svg></span>
+        </div>
+        <div class="ae-mute" style="font-size:12px;margin-top:4px">Prefix · /64 · Native</div>
+    </article>
+
+    <article class="ae-card ae-widget ae-widget--vpn" data-widget="vpn">
+        <div class="ae-stat-row">
+            <div class="ae-stat">
+                <span class="ae-stat__label"><%:VPN%></span>
+                <span class="ae-stat__value">WireGuard</span>
+            </div>
+            <span class="ae-pill ae-pill--success">Active</span>
+        </div>
+        <div class="ae-row" style="margin-top:8px">
+            <span class="ae-stat__icon"><svg class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-shield"/></svg></span>
+            <div>
+                <div class="ae-mute" style="font-size:12px">10.0.0.1/24 · 3 peers</div>
+                <div class="ae-mono" style="font-size:12px;color:var(--ae-text-3)">rx 18.3 KB/s · tx 9.7 KB/s</div>
+            </div>
+        </div>
+    </article>
+
+    <article class="ae-card ae-widget ae-widget--wifi" data-widget="wifi">
+        <header class="ae-card__head">
+            <h3 class="ae-card__title"><%:Wireless%></h3>
+            <span class="ae-pill">2 radios</span>
+        </header>
+        <div class="ae-grid" style="grid-template-columns:repeat(2,1fr)">
+            <div class="ae-stack">
+                <span class="ae-stat__label">radio0 · 2.4G</span>
+                <span class="ae-stat__value">CH 6 · 26 dBm</span>
+                <div class="ae-progress ae-progress--sm"><div class="ae-progress__fill" style="width:62%"></div></div>
+                <span class="ae-mute" style="font-size:12px">12 clients</span>
+            </div>
+            <div class="ae-stack">
+                <span class="ae-stat__label">radio1 · 5G</span>
+                <span class="ae-stat__value">CH 36 · 24 dBm</span>
+                <div class="ae-progress ae-progress--sm"><div class="ae-progress__fill" style="width:38%"></div></div>
+                <span class="ae-mute" style="font-size:12px">7 clients</span>
+            </div>
+        </div>
+    </article>
+
+    <article class="ae-card ae-widget ae-widget--clients" data-widget="clients">
+        <header class="ae-card__head">
+            <h3 class="ae-card__title"><%:Connected Clients%></h3>
+            <span class="ae-pill ae-pill--primary">19 online</span>
+        </header>
+        <div class="ae-clients">
+            <div class="ae-client"><div class="ae-client__avatar">A</div><span class="ae-truncate">Alice's iPhone</span><span class="ae-client__rate">2.1 MB/s</span><span class="ae-pill ae-pill--success">5G</span></div>
+            <div class="ae-client"><div class="ae-client__avatar">B</div><span class="ae-truncate">Bob's MacBook Pro</span><span class="ae-client__rate">0.4 MB/s</span><span class="ae-pill ae-pill--success">5G</span></div>
+            <div class="ae-client"><div class="ae-client__avatar">D</div><span class="ae-truncate">Desk NAS</span><span class="ae-client__rate">18.0 MB/s</span><span class="ae-pill">LAN</span></div>
+            <div class="ae-client"><div class="ae-client__avatar">T</div><span class="ae-truncate">TV — Living room</span><span class="ae-client__rate">6.2 MB/s</span><span class="ae-pill ae-pill--success">5G</span></div>
+        </div>
+    </article>
+
+    <article class="ae-card ae-widget ae-widget--uptime" data-widget="uptime">
+        <div class="ae-stat-row">
+            <div class="ae-stat">
+                <span class="ae-stat__label"><%:System Uptime%></span>
+                <span class="ae-stat__value" data-bind="uptime">—</span>
+            </div>
+            <span class="ae-stat__icon"><svg class="ae-icon"><use href="<%=media%>/icons/lucide.svg#icon-clock"/></svg></span>
+        </div>
+        <div class="ae-mute" style="font-size:12px;margin-top:4px">Load avg · 0.18 / 0.21 / 0.24</div>
+    </article>
+
+    <article class="ae-card ae-widget ae-widget--updates" data-widget="updates">
+        <header class="ae-card__head">
+            <h3 class="ae-card__title"><%:Package Updates%></h3>
+            <span class="ae-pill ae-pill--warning">3 available</span>
+        </header>
+        <div class="ae-updates">
+            <div class="ae-updates__name">luci-app-ddns</div>
+            <div class="ae-updates__from">2.4.0-1</div>
+            <div class="ae-updates__to">2.4.1-2</div>
+        </div>
+        <div class="ae-updates">
+            <div class="ae-updates__name">wireguard-tools</div>
+            <div class="ae-updates__from">1.0.20210914</div>
+            <div class="ae-updates__to">1.0.20230223</div>
+        </div>
+        <div class="ae-updates">
+            <div class="ae-updates__name">openssl</div>
+            <div class="ae-updates__from">3.0.9-1</div>
+            <div class="ae-updates__to">3.0.10-1</div>
+        </div>
+    </article>
+</div>
+
+<script type="module" src="<%=media%>/js/dashboard.js"></script>
+<%+footer%>

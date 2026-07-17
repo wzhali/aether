@@ -1,0 +1,97 @@
+/* =============================================================================
+ * Aether — Table
+ * ============================================================================= */
+
+.ae-table-wrap {
+  background: var(--ae-card);
+  border: 1px solid var(--ae-border);
+  border-radius: var(--ae-radius);
+  overflow: hidden;
+  box-shadow: var(--ae-shadow-1);
+}
+
+.ae-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--ae-text-sm);
+  color: var(--ae-text-1);
+}
+
+.ae-table th,
+.ae-table td {
+  text-align: start;
+  padding: 12px 16px;
+  border-block-end: 1px solid var(--ae-divider);
+  vertical-align: middle;
+}
+
+.ae-table th {
+  font-weight: 500;
+  font-size: var(--ae-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ae-text-3);
+  background: var(--ae-surface-2);
+  position: sticky; top: 0;
+}
+
+.ae-table tbody tr {
+  transition: background var(--ae-duration-fast) var(--ae-easing);
+}
+.ae-table tbody tr:hover { background: var(--ae-hover); }
+.ae-table tbody tr[aria-selected="true"],
+.ae-table tbody tr.is-selected { background: var(--ae-selected); }
+
+.ae-table td .ae-mono { color: var(--ae-text-3); }
+
+.ae-table--compact th,
+.ae-table--compact td { padding: 8px 12px; }
+
+.ae-table--bordered th,
+.ae-table--bordered td { border-inline-end: 1px solid var(--ae-divider); }
+.ae-table--bordered th:last-child,
+.ae-table--bordered td:last-child { border-inline-end: 0; }
+
+/* Striped rows */
+.ae-table--striped tbody tr:nth-child(odd) { background: var(--ae-surface-2); }
+.ae-table--striped tbody tr:nth-child(odd):hover { background: var(--ae-hover); }
+
+/* Scrollable body */
+.ae-table--scroll { max-height: 420px; overflow: auto; display: block; }
+.ae-table--scroll thead,
+.ae-table--scroll tbody { display: table; width: 100%; table-layout: fixed; }
+
+/* Status cells */
+.ae-table td .ae-pill { margin-inline-end: 6px; }
+
+.ae-empty {
+  padding: var(--ae-spacing-6);
+  text-align: center;
+  color: var(--ae-text-3);
+  font-size: var(--ae-text-sm);
+}
+
+/* Responsive: collapse to cards on very small screens */
+@media (max-width: 560px) {
+  .ae-table--responsive thead { display: none; }
+  .ae-table--responsive,
+  .ae-table--responsive tbody,
+  .ae-table--responsive tr,
+  .ae-table--responsive td { display: block; width: 100%; }
+  .ae-table--responsive tr {
+    padding: var(--ae-spacing-3);
+    border-block-end: 1px solid var(--ae-divider);
+  }
+  .ae-table--responsive td {
+    padding: 4px 0;
+    border: 0;
+  }
+  .ae-table--responsive td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: var(--ae-text-xs);
+    color: var(--ae-text-3);
+    margin-block-end: 2px;
+  }
+}

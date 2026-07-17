@@ -1,0 +1,64 @@
+/* =============================================================================
+ * Aether — Terminal window
+ * ============================================================================= */
+
+.ae-terminal {
+  background: #0E1117;
+  color: #E6EDF3;
+  border-radius: var(--ae-radius);
+  border: 1px solid var(--ae-border);
+  box-shadow: var(--ae-shadow-2);
+  font-family: var(--ae-font-mono);
+  font-size: var(--ae-text-sm);
+  line-height: 1.6;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+
+.ae-terminal__head {
+  display: flex; align-items: center; gap: var(--ae-spacing-2);
+  padding: 8px 12px;
+  background: #161B22;
+  border-block-end: 1px solid #30363D;
+}
+.ae-terminal__dot { width: 10px; height: 10px; border-radius: 50%; background: #30363D; }
+.ae-terminal__dot--r { background: #FF5F57; }
+.ae-terminal__dot--y { background: #FEBC2E; }
+.ae-terminal__dot--g { background: #28C840; }
+.ae-terminal__title {
+  margin-inline-start: var(--ae-spacing-3);
+  color: #8B949E;
+  font-size: var(--ae-text-xs);
+}
+
+.ae-terminal__body {
+  padding: 12px 16px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow: auto;
+  max-height: 360px;
+  min-height: 160px;
+}
+
+.ae-terminal__prompt {
+  color: #58A6FF;
+}
+.ae-terminal__line--ok    { color: #7EE787; }
+.ae-terminal__line--warn  { color: #D29922; }
+.ae-terminal__line--err   { color: #FF7B72; }
+.ae-terminal__line--muted { color: #8B949E; }
+
+.ae-terminal__input {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  border-block-start: 1px solid #30363D;
+  background: #0E1117;
+}
+.ae-terminal__input input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}

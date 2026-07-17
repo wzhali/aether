@@ -1,0 +1,100 @@
+/* =============================================================================
+ * Aether — Theme Settings page
+ * ============================================================================= */
+
+.ae-settings {
+  display: grid;
+  gap: var(--ae-spacing-5);
+  grid-template-columns: 240px 1fr;
+}
+@media (max-width: 900px) {
+  .ae-settings { grid-template-columns: 1fr; }
+}
+
+.ae-settings__nav {
+  display: flex; flex-direction: column; gap: 2px;
+  background: var(--ae-card);
+  border: 1px solid var(--ae-border);
+  border-radius: var(--ae-radius);
+  padding: var(--ae-spacing-2);
+  height: max-content;
+  position: sticky;
+  top: calc(var(--ae-topbar-height) + var(--ae-spacing-4));
+}
+.ae-settings__nav a {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  color: var(--ae-text-2);
+  text-decoration: none;
+  font-size: var(--ae-text-sm);
+}
+.ae-settings__nav a:hover { background: var(--ae-hover); color: var(--ae-text-1); }
+.ae-settings__nav a[aria-current="true"] {
+  background: var(--ae-active);
+  color: var(--ae-primary);
+  font-weight: 500;
+}
+
+.ae-settings__section {
+  background: var(--ae-card);
+  border: 1px solid var(--ae-border);
+  border-radius: var(--ae-radius);
+  padding: var(--ae-spacing-5);
+  box-shadow: var(--ae-shadow-1);
+}
+.ae-settings__section + .ae-settings__section { margin-block-start: var(--ae-spacing-4); }
+
+.ae-settings__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--ae-spacing-4);
+  align-items: center;
+  padding-block: var(--ae-spacing-3);
+  border-block-end: 1px solid var(--ae-divider);
+}
+.ae-settings__row:last-child { border-block-end: 0; }
+.ae-settings__row-label { font-weight: 500; }
+.ae-settings__row-hint  { color: var(--ae-text-3); font-size: var(--ae-text-xs); margin-block-start: 2px; }
+
+.ae-color-swatches {
+  display: inline-flex; gap: 8px; flex-wrap: wrap;
+}
+.ae-color-swatch {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--ae-border);
+  cursor: pointer;
+  transition: transform var(--ae-duration-fast) var(--ae-easing);
+}
+.ae-color-swatch:hover { transform: scale(1.08); }
+.ae-color-swatch[aria-pressed="true"] {
+  border-color: var(--ae-primary);
+  box-shadow: 0 0 0 3px var(--ae-focus-ring);
+}
+
+.ae-wallpapers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--ae-spacing-3);
+}
+.ae-wallpaper {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--ae-radius-sm);
+  border: 1px solid var(--ae-border);
+  background-size: cover; background-position: center;
+  cursor: pointer;
+  transition: transform var(--ae-duration-fast) var(--ae-easing);
+}
+.ae-wallpaper:hover { transform: scale(1.02); }
+.ae-wallpaper[aria-pressed="true"] {
+  outline: 3px solid var(--ae-primary);
+  outline-offset: 2px;
+}
+
+.ae-widget-toggles {
+  display: grid;
+  gap: var(--ae-spacing-2);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}

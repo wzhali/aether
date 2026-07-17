@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="bg" cx="80%" cy="100%" r="80%">
+      <stop offset="0" stop-color="#14181F"/>
+      <stop offset="1" stop-color="#0B0E14"/>
+    </radialGradient>
+    <radialGradient id="orb1" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#BF5AF2" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#BF5AF2" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orb2" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#0A84FF" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#0A84FF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <circle cx="320"  cy="780" r="540" fill="url(#orb1)"/>
+  <circle cx="1640" cy="320" r="600" fill="url(#orb2)"/>
+  <circle cx="1100" cy="800" r="320" fill="url(#orb1)" opacity="0.6"/>
+</svg>

@@ -1,0 +1,22 @@
+/* =============================================================================
+ * Aether — Breadcrumb
+ * ============================================================================= */
+
+.ae-crumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: var(--ae-text-sm);
+  color: var(--ae-text-3);
+  margin: 0 0 var(--ae-spacing-3);
+}
+
+.ae-crumbs__item { display: inline-flex; align-items: center; gap: 6px; }
+.ae-crumbs__item a { color: var(--ae-text-3); text-decoration: none; }
+.ae-crumbs__item a:hover { color: var(--ae-text-1); }
+.ae-crumbs__item--current { color: var(--ae-text-1); font-weight: 500; }
+.ae-crumbs__sep { color: var(--ae-text-3); }
+.ae-crumbs__sep::before { content: "/"; }
+
+.ae-crumbs .ae-icon { width: 14px; height: 14px; }

@@ -1,0 +1,4 @@
+luci-theme-aether
+# Optional runtime dependencies. All bundled by default; uncomment when
+# the user opts into enhanced functionality.
+# +luci-app-dashboard (if split widget feeds are desired)

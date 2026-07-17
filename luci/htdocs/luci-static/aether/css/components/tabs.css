@@ -1,0 +1,78 @@
+/* =============================================================================
+ * Aether — Tabs (underline, pill, segmented), Segmented Control
+ * ============================================================================= */
+
+.ae-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ae-spacing-3);
+}
+
+.ae-tabs__list {
+  display: flex;
+  gap: var(--ae-spacing-4);
+  border-block-end: 1px solid var(--ae-border);
+  padding-inline: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ae-tabs__list::-webkit-scrollbar { display: none; }
+
+.ae-tab {
+  background: transparent;
+  border: 0;
+  padding: 10px 4px;
+  font-size: var(--ae-text-sm);
+  color: var(--ae-text-3);
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  transition: color var(--ae-duration-fast) var(--ae-easing);
+}
+.ae-tab::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ae-primary);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--ae-duration) var(--ae-easing-out);
+}
+.ae-tab[aria-selected="true"],
+.ae-tab.is-active {
+  color: var(--ae-text-1);
+  font-weight: 500;
+}
+.ae-tab[aria-selected="true"]::after,
+.ae-tab.is-active::after {
+  transform: scaleX(1);
+}
+.ae-tab:hover { color: var(--ae-text-2); }
+
+/* Pill tabs */
+.ae-tabs--pill .ae-tabs__list {
+  gap: 4px;
+  background: var(--ae-surface-2);
+  padding: 4px;
+  border-radius: var(--ae-radius-sm);
+  border: 0;
+}
+.ae-tabs--pill .ae-tab {
+  border-radius: 5px;
+  padding: 6px 12px;
+}
+.ae-tabs--pill .ae-tab::after { display: none; }
+.ae-tabs--pill .ae-tab[aria-selected="true"] {
+  background: var(--ae-card);
+  box-shadow: var(--ae-shadow-1);
+}
+
+/* Panel */
+.ae-tabs__panel {
+  display: none;
+  padding-block-start: var(--ae-spacing-3);
+}
+.ae-tabs__panel.is-active { display: block; }

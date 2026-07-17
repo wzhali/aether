@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" width="1440" height="900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F2F2F7"/>
+      <stop offset="1" stop-color="#E5E5EA"/>
+    </linearGradient>
+    <linearGradient id="hero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A84FF" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#BF5AF2" stop-opacity="0.25"/>
+    </linearGradient>
+  </defs>
+  <rect width="1440" height="900" fill="url(#bg)"/>
+  <rect x="0" y="0" width="780" height="900" fill="url(#hero)"/>
+  <text x="80" y="120" font-family="Inter, sans-serif" font-size="56" fill="#1C1C1E" font-weight="600">Aether Login</text>
+  <text x="80" y="160" font-family="Inter, sans-serif" font-size="20" fill="#6E6E73">Replace this file with a real screenshot</text>
+</svg>

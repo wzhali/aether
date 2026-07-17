@@ -1,0 +1,78 @@
+<%#
+  Aether — Login template (`sysauth.htm`).
+  Consumed by `luci.dispatcher` for the /cgi-bin/luci/ login page.
+%>
+<%+header%>
+<%
+    local sys  = require "luci.sys"
+    local fs   = require "luci.fs"
+    local http = require "luci.http"
+    local util = require "luci.util"
+
+    local hostname = sys.hostname() or "OpenWrt"
+    local model    = sys.exec("cat /tmp/sysinfo/model 2>/dev/null") or ""
+    if model then model = model:gsub("%s+$", "") end
+
+    http.prepare_content("text/html; charset=UTF-8")
+%>
+<!DOCTYPE html>
+<html lang="<%=luci.i18n.context.lang%>" data-theme="auto">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <title><%=hostname%> · Aether Login</title>
+    <link rel="stylesheet" href="<%=media%>/css/aether.css">
+</head>
+<body class="ae-page ae-page--login">
+    <main class="ae-login" role="main">
+        <section class="ae-login__panel">
+            <header class="ae-login__brand">
+                <span class="ae-login__logo" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" width="36" height="36">
+                        <defs>
+                            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+                                <stop offset="0" stop-color="var(--ae-accent)"/>
+                                <stop offset="1" stop-color="var(--ae-primary)"/>
+                            </linearGradient>
+                        </defs>
+                        <path fill="url(#g)" d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2Zm0 4a10 10 0 1 1-10 10A10 10 0 0 1 16 6Zm0 4a6 6 0 1 0 6 6 6 6 0 0 0-6-6Z"/>
+                    </svg>
+                </span>
+                <h1 class="ae-login__title"><%=hostname%></h1>
+                <p class="ae-login__subtitle"><%= model ~= "" and model or translate("OpenWrt LuCI") %></p>
+            </header>
+
+            <form class="ae-login__form" method="post" action="<%=pcdata(luci.http.getenv("REQUEST_URI") or "/cgi-bin/luci")%>" autocomplete="on">
+                <input type="hidden" name="luci_username" value="root">
+                <label class="ae-field">
+                    <span class="ae-field__label"><%:Username%></span>
+                    <input class="ae-input" type="text" name="luci_username" required autofocus aria-required="true">
+                </label>
+                <label class="ae-field">
+                    <span class="ae-field__label"><%:Password%></span>
+                    <input class="ae-input" type="password" name="luci_password" required aria-required="true">
+                </label>
+                <button class="ae-btn ae-btn--primary ae-btn--block" type="submit">
+                    <%=translate("Sign In")%>
+                </button>
+            </form>
+
+            <footer class="ae-login__footer">
+                <small>Aether · OpenWrt 25.12</small>
+            </footer>
+        </section>
+
+        <aside class="ae-login__hero" aria-hidden="true">
+            <div class="ae-login__hero-orb ae-login__hero-orb--a"></div>
+            <div class="ae-login__hero-orb ae-login__hero-orb--b"></div>
+            <div class="ae-login__hero-orb ae-login__hero-orb--c"></div>
+            <div class="ae-login__hero-text">
+                <h2><%:Network, beautifully orchestrated.%></h2>
+                <p><%:Aether brings a calm, premium interface to your router — built on OpenWrt 25.12.%></p>
+            </div>
+        </aside>
+    </main>
+    <script type="module" src="<%=media%>/js/theme.js"></script>
+</body>
+</html>

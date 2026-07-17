@@ -1,0 +1,126 @@
+/* =============================================================================
+ * Aether — Button
+ * ============================================================================= */
+
+.ae-btn {
+  --_bg:        var(--ae-surface-2);
+  --_fg:        var(--ae-text-1);
+  --_border:    var(--ae-border-strong);
+  --_hover-bg:  var(--ae-hover);
+  --_active-bg: var(--ae-active);
+  --_shadow:    var(--ae-shadow-1);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ae-spacing-2);
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: var(--ae-text-sm);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  border-radius: var(--ae-radius-sm);
+  background: var(--_bg);
+  color: var(--_fg);
+  border: 1px solid var(--_border);
+  box-shadow: var(--_shadow);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition:
+    background var(--ae-duration-fast) var(--ae-easing),
+    color      var(--ae-duration-fast) var(--ae-easing),
+    transform  var(--ae-duration-fast) var(--ae-easing),
+    box-shadow var(--ae-duration-fast) var(--ae-easing),
+    border-color var(--ae-duration-fast) var(--ae-easing);
+}
+
+.ae-btn:hover  { background: var(--_hover-bg); }
+.ae-btn:active { background: var(--_active-bg); transform: translateY(0.5px); }
+.ae-btn[disabled],
+.ae-btn[aria-disabled="true"] {
+  opacity: 0.5; cursor: not-allowed; box-shadow: none;
+}
+
+.ae-btn .ae-icon { width: 16px; height: 16px; }
+
+/* ---- Variants ---- */
+.ae-btn--primary {
+  --_bg:        var(--ae-primary);
+  --_fg:        var(--ae-primary-contrast);
+  --_border:    transparent;
+  --_hover-bg:  var(--ae-primary-strong);
+  --_active-bg: var(--ae-primary-strong);
+}
+.ae-btn--accent {
+  --_bg:        var(--ae-accent);
+  --_fg:        var(--ae-accent-contrast);
+  --_border:    transparent;
+  --_hover-bg:  var(--ae-accent-strong);
+  --_active-bg: var(--ae-accent-strong);
+}
+.ae-btn--success { --_bg: var(--ae-success); --_fg:#fff; --_border:transparent; --_hover-bg: color-mix(in srgb, var(--ae-success) 80%, #000 20%); --_active-bg: color-mix(in srgb, var(--ae-success) 70%, #000 30%); }
+.ae-btn--warning { --_bg: var(--ae-warning); --_fg:#1C1300; --_border:transparent; }
+.ae-btn--danger  { --_bg: var(--ae-danger);  --_fg:#fff; --_border:transparent; --_hover-bg: color-mix(in srgb, var(--ae-danger) 80%, #000 20%); --_active-bg: color-mix(in srgb, var(--ae-danger) 70%, #000 30%); }
+
+.ae-btn--ghost  {
+  --_bg: transparent;
+  --_border: transparent;
+  --_shadow: none;
+}
+.ae-btn--ghost:hover { background: var(--ae-hover); }
+
+.ae-btn--outline {
+  --_bg: transparent;
+  --_border: var(--ae-border-strong);
+}
+.ae-btn--outline:hover { --_bg: var(--ae-hover); }
+
+/* ---- Sizes ---- */
+.ae-btn--sm { min-height: 28px; padding: 0 10px; font-size: var(--ae-text-xs); border-radius: 5px; }
+.ae-btn--lg { min-height: 44px; padding: 0 20px; font-size: var(--ae-text-md); border-radius: var(--ae-radius); }
+.ae-btn--block { display: flex; width: 100%; }
+
+/* ---- Icon-only ---- */
+.ae-btn--icon { width: 36px; padding: 0; }
+.ae-btn--icon.ae-btn--sm { width: 28px; }
+.ae-btn--icon.ae-btn--lg { width: 44px; }
+
+/* ---- FAB ---- */
+.ae-fab {
+  position: fixed;
+  inset-block-end: var(--ae-spacing-5);
+  inset-inline-end: var(--ae-spacing-5);
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--ae-primary);
+  color: var(--ae-primary-contrast);
+  box-shadow: var(--ae-shadow-3);
+  display: inline-flex; align-items: center; justify-content: center;
+  z-index: 30;
+}
+.ae-fab:hover { background: var(--ae-primary-strong); }
+
+/* ---- Button group ---- */
+.ae-btn-group {
+  display: inline-flex;
+  border-radius: var(--ae-radius-sm);
+  background: var(--ae-surface-2);
+  border: 1px solid var(--ae-border);
+  padding: 2px;
+  gap: 2px;
+}
+.ae-btn-group .ae-btn {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  border-radius: 5px;
+  color: var(--ae-text-2);
+}
+.ae-btn-group .ae-btn[aria-pressed="true"],
+.ae-btn-group .ae-btn.is-active {
+  background: var(--ae-card);
+  color: var(--ae-text-1);
+  box-shadow: var(--ae-shadow-1);
+}

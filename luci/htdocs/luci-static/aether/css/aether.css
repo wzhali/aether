@@ -1,0 +1,45 @@
+/* =============================================================================
+ * Aether — CSS entrypoint
+ * Order matters: tokens → base → layout → components → pages → legacy.
+ * ============================================================================= */
+
+@import url("./tokens.css");
+@import url("./base.css");
+@import url("./layout.css");
+
+@import url("./components/button.css");
+@import url("./components/form.css");
+@import url("./components/card.css");
+@import url("./components/table.css");
+@import url("./components/alert.css");
+@import url("./components/progress.css");
+@import url("./components/chart.css");
+@import url("./components/tabs.css");
+@import url("./components/dropdown.css");
+@import url("./components/modal.css");
+@import url("./components/terminal.css");
+@import url("./components/nav.css");
+@import url("./components/breadcrumb.css");
+@import url("./components/notification.css");
+@import url("./components/search.css");
+
+@import url("./pages/login.css");
+@import url("./pages/dashboard.css");
+@import url("./pages/settings.css");
+
+@import url("./vendor/cbi-legacy.css");
+
+/* Last-write-wins runtime overrides. Loaded by JS as an inline \3c style>. */
+.ae-runtime-vars { /* placeholder anchor */ }
+
+/* Convenience class used by theme.htm to keep markup minimal. */
+.ae-icon { width: 16px; height: 16px; flex-shrink: 0; }
+.ae-icon--lg { width: 20px; height: 20px; }
+.ae-icon--xl { width: 28px; height: 28px; }
+
+/* Density / compact mode */
+.ae-shell[data-density="compact"] .ae-sidebar__link { padding-block: 6px; }
+.ae-shell[data-density="compact"] .ae-card { padding: var(--ae-spacing-3); }
+
+/* Hide labels when sidebar collapsed */
+.ae-shell[data-sidebar="collapsed"] .ae-sidebar__inner { padding-inline: 8px; }

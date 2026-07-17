@@ -1,0 +1,126 @@
+<%#
+  Aether header — wraps dispatcher content in our shell (topbar + sidebar).
+  This file is rendered by LuCI dispatcher after the page body.
+%>
+<div class="ae-shell" id="ae-shell" data-sidebar="expanded" data-density="comfortable">
+    <header class="ae-topbar" role="banner">
+        <button class="ae-btn ae-btn--ghost ae-btn--icon ae-sidebar__toggle" aria-label="<%:Toggle sidebar%>">
+            <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <path d="M3 6h18M3 12h18M3 18h18"/>
+            </svg>
+        </button>
+
+        <a class="ae-topbar__brand" href="<%=controller%>/admin/status/overview">
+            <svg class="ae-icon" viewBox="0 0 32 32" aria-hidden="true">
+                <defs>
+                    <linearGradient id="tbG" x1="0" x2="1" y1="0" y2="1">
+                        <stop offset="0" stop-color="var(--ae-accent)"/>
+                        <stop offset="1" stop-color="var(--ae-primary)"/>
+                    </linearGradient>
+                </defs>
+                <path fill="url(#tbG)" d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2Zm0 4a10 10 0 1 1-10 10A10 10 0 0 1 16 6Zm0 4a6 6 0 1 0 6 6 6 6 0 0 0-6-6Z"/>
+            </svg>
+            <span>Aether</span>
+        </a>
+
+        <div class="ae-search" id="ae-search">
+            <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+            </svg>
+            <input class="ae-input" type="search" placeholder="<%:Search%>" aria-label="<%:Search%>">
+            <span class="ae-search__kbd">⌘K</span>
+            <div class="ae-search__results" role="listbox"></div>
+        </div>
+
+        <div class="ae-topbar__spacer"></div>
+
+        <div class="ae-notify" id="ae-notify">
+            <button class="ae-btn ae-btn--ghost ae-btn--icon" aria-label="<%:Notifications%>">
+                <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                    <path d="M10 21a2 2 0 0 0 4 0"/>
+                </svg>
+                <span class="ae-notify__badge" aria-label="2 <%:unread%>">2</span>
+            </button>
+            <div class="ae-notify__panel" role="region" aria-label="<%:Notifications%>"></div>
+        </div>
+
+        <div class="ae-menu" id="ae-user-menu">
+            <button class="ae-btn ae-btn--ghost" aria-haspopup="menu" aria-expanded="false">
+                <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                    <circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>
+                </svg>
+                <span>root</span>
+            </button>
+            <div class="ae-menu__panel" role="menu">
+                <div class="ae-menu__label"><%:Account%></div>
+                <a class="ae-menu__item" href="<%=controller%>/admin/system/admin"><%=translate("Profile")%></a>
+                <a class="ae-menu__item" href="<%=controller%>/admin/system/aether"><%=translate("Theme Settings")%></a>
+                <div class="ae-menu__sep"></div>
+                <a class="ae-menu__item ae-menu__item--danger" href="<%=controller%>/admin/logout"><%=translate("Sign out")%></a>
+            </div>
+        </div>
+    </header>
+
+    <aside class="ae-sidebar" aria-label="<%:Primary navigation%>">
+        <nav class="ae-sidebar__inner" id="ae-sidebar-inner">
+            <div class="ae-sidebar__section">
+                <h3 class="ae-sidebar__heading"><%:Overview%></h3>
+                <a class="ae-sidebar__link" href="<%=controller%>/admin/status/overview" aria-current="page">
+                    <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg>
+                    <span><%:Dashboard%></span>
+                </a>
+                <a class="ae-sidebar__link" href="<%=controller%>/admin/status/realtime">
+                    <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
+                    <span><%:Realtime%></span>
+                </a>
+                <a class="ae-sidebar__link" href="<%=controller%>/admin/status/connections">
+                    <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M9 6h6M6 9v6M18 9v6"/></svg>
+                    <span><%:Connections%></span>
+                </a>
+            </div>
+
+            <div class="ae-sidebar__section">
+                <h3 class="ae-sidebar__heading"><%:Network%></h3>
+                <a class="ae-sidebar__link" href="<%=controller%>/admin/network/interfaces">
+                    <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="9" width="18" height="6" rx="1.5"/><path d="M7 9V7M17 9V7M7 15v2M17 15v2"/></svg>
+                    <span><%:Interfaces%></span>
+                </a>
+                <a class="ae-sidebar__link" href="<%=controller%>/admin/network/wireless">
+                    <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M5 12.55a11 11 0 0 1 14 0"/><path d="M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1.5"/></svg>
+                    <span><%:Wireless%></span>
+                </a>
+                <a class="ae-sidebar__link" href="<%=controller%>/admin/network/firewall">
+                    <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6Z"/></svg>
+                    <span><%:Firewall%></span>
+                </a>
+                <a class="ae-sidebar__link" href="<%=controller%>/admin/network/dhcp">
+                    <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6"/></svg>
+                    <span><%:DHCP%></span>
+                </a>
+            </div>
+
+            <div class="ae-sidebar__section">
+                <h3 class="ae-sidebar__heading"><%:System%></h3>
+                <a class="ae-sidebar__link" href="<%=controller%>/admin/system/admin">
+                    <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                    <span><%:Admin%></span>
+                </a>
+                <a class="ae-sidebar__link" href="<%=controller%>/admin/system/startup">
+                    <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>
+                    <span><%:Startup%></span>
+                </a>
+                <a class="ae-sidebar__link" href="<%=controller%>/admin/system/aether">
+                    <svg class="ae-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg>
+                    <span><%:Aether Settings%></span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="ae-main" id="ae-main" role="main">
+        <nav class="ae-crumbs" aria-label="<%:Breadcrumb%>">
+            <span class="ae-crumbs__item"><a href="<%=controller%>/admin/status/overview"><%:Status%></a></span>
+            <span class="ae-crumbs__sep"></span>
+            <span class="ae-crumbs__item ae-crumbs__item--current"><%:Overview%></span>
+        </nav>

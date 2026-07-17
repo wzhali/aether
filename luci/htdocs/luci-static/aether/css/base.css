@@ -1,0 +1,140 @@
+/* =============================================================================
+ * Aether — Base reset, typography and global utilities.
+ * ============================================================================= */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-family: var(--ae-font-sans);
+  font-size: calc(var(--ae-text-base) * var(--ae-font-scale));
+  line-height: var(--ae-line-base);
+  color: var(--ae-text-1);
+  background: var(--ae-bg);
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+  tab-size: 4;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--ae-bg);
+  color: var(--ae-text-1);
+  font-feature-settings: "ss01", "cv11";
+}
+
+img, svg, video, canvas, audio, iframe, embed, object {
+  display: block;
+  max-width: 100%;
+}
+
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; padding: 0; }
+
+a {
+  color: var(--ae-primary);
+  text-decoration: none;
+  transition: color var(--ae-duration-fast) var(--ae-easing);
+}
+a:hover { color: var(--ae-primary-strong); text-decoration: underline; }
+
+/* ---- Focus ---- */
+:focus-visible {
+  outline: 2px solid var(--ae-focus-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---- Headings ---- */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 var(--ae-spacing-3);
+  font-weight: 600;
+  line-height: var(--ae-line-tight);
+  color: var(--ae-text-1);
+  letter-spacing: -0.01em;
+}
+h1 { font-size: var(--ae-text-3xl); letter-spacing: -0.02em; }
+h2 { font-size: var(--ae-text-2xl); letter-spacing: -0.015em; }
+h3 { font-size: var(--ae-text-xl); }
+h4 { font-size: var(--ae-text-lg); }
+h5 { font-size: var(--ae-text-md); }
+h6 { font-size: var(--ae-text-base); color: var(--ae-text-2); }
+
+p { margin: 0 0 var(--ae-spacing-3); color: var(--ae-text-2); }
+
+code, kbd, samp, pre {
+  font-family: var(--ae-font-mono);
+  font-size: 0.92em;
+}
+
+code {
+  background: var(--ae-surface-2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--ae-text-1);
+}
+
+pre {
+  background: var(--ae-surface-2);
+  padding: var(--ae-spacing-4);
+  border-radius: var(--ae-radius);
+  overflow: auto;
+  border: 1px solid var(--ae-border);
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: var(--ae-divider);
+  margin: var(--ae-spacing-5) 0;
+}
+
+/* ---- Selection ---- */
+::selection { background: var(--ae-selected); color: var(--ae-text-1); }
+
+/* ---- Scrollbar ---- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ae-border-strong) transparent;
+}
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb {
+  background: var(--ae-border-strong);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* ---- Utilities ---- */
+.ae-sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+.ae-row    { display: flex; gap: var(--ae-spacing-3); align-items: center; }
+.ae-stack  { display: flex; flex-direction: column; gap: var(--ae-spacing-3); }
+.ae-grid   { display: grid; gap: var(--ae-spacing-4); }
+
+.ae-mute   { color: var(--ae-text-3); }
+.ae-mono   { font-family: var(--ae-font-mono); }
+.ae-truncate {
+  overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; min-width: 0;
+}
+
+.ae-glass {
+  background: color-mix(in srgb, var(--ae-surface) calc(var(--ae-glass-alpha) * 100%), transparent);
+  backdrop-filter: blur(var(--ae-blur-strength)) saturate(140%);
+  backdrop-filter: blur(var(--ae-blur-strength)) saturate(140%);
+  border: 1px solid var(--ae-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

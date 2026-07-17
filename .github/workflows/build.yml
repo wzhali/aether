@@ -1,0 +1,202 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      target:
+        description: "OpenWrt SDK target"
+        required: true
+        type: string
+    outputs:
+      ipk:
+        description: "Path to the produced .ipk"
+        value: ${{ jobs.build.outputs.ipk }}
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "OpenWrt SDK target"
+        required: true
+        default: x86_64
+        type: choice
+        options:
+          - x86_64
+          - armsr-armv7
+          - armsr-armv8
+          - mediatek-mt7986
+          - qualcomm-ipq807x
+          - rockchip-armv8
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint & self-check
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install stylelint
+        run: |
+          npm install --no-audit --no-fund --silent \
+            stylelint@16.10.0 stylelint-config-standard@36.0.1
+
+      - name: Self-check (selftest.sh)
+        run: bash scripts/selftest.sh
+
+      - name: Stylelint
+        run: npx stylelint "luci/htdocs/luci-static/aether/css/**/*.css"
+
+      - name: JS syntax
+        run: |
+          for f in $(find luci/htdocs/luci-static/aether/js -name '*.js'); do
+            node --check "$f"
+          done
+
+      - name: Lua syntax (best effort)
+        run: |
+          if command -v luac5.1 >/dev/null; then
+            for f in $(find luci/luasrc -name '*.lua'); do luac5.1 -p "$f"; done
+          else
+            echo "luac5.1 not available, skipping"
+          fi
+
+  preview:
+    name: Build static preview
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate preview HTML
+        run: python3 scripts/preview.py dist/preview
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preview-${{ inputs.target }}
+          path: dist/preview
+          if-no-files-found: error
+
+  screenshot:
+    name: Capture screenshots
+    needs: preview
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Playwright
+        run: |
+          pip install --quiet playwright
+          playwright install --with-deps chromium
+      - name: Download preview artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: preview-${{ inputs.target }}
+          path: dist/preview
+      - name: Capture
+        run: python3 scripts/screenshot.py dist/preview dist/screenshots
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ inputs.target }}
+          path: dist/screenshots
+          if-no-files-found: error
+
+  build:
+    name: Build SDK package (${{ inputs.target }})
+    needs: [lint]
+    runs-on: ubuntu-24.04
+    outputs:
+      ipk: ${{ steps.find.outputs.ipk }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch OpenWrt 25.12 SDK
+        run: |
+          set -e
+          BASE="https://downloads.openwrt.org/releases/25.12.0/targets"
+          case "${{ inputs.target }}" in
+            x86_64)              T="x86/64" ;;
+            armsr-armv7)         T="armsr/armv7" ;;
+            armsr-armv8)         T="armsr/armv8" ;;
+            mediatek-mt7986)     T="mediatek/mt7986" ;;
+            qualcomm-ipq807x)    T="qualcomm/ipq807x" ;;
+            rockchip-armv8)      T="rockchip/armv8" ;;
+            *) echo "Unknown target ${{ inputs.target }}"; exit 1 ;;
+          esac
+          URL="${BASE}/${T}/openwrt-sdk-25.12.0-${T//\//-}_linux-x86_64.tar.xz"
+          mkdir -p sdk && cd sdk
+          wget -q "$URL" -O sdk.tar.xz
+          tar -xJf sdk.tar.xz --strip-components=1
+          ls
+
+      - name: Mount theme
+        run: |
+          cp -r . sdk/package/luci-theme-aether
+          rm -rf sdk/package/luci-theme-aether/.git
+          rm -rf sdk/package/luci-theme-aether/node_modules
+
+      - name: Build package
+        run: |
+          cd sdk
+          ./scripts/feeds update -i luci
+          ./scripts/feeds install -p luci luci-base
+          make package/luci-theme-aether/compile -j$(nproc) V=s
+
+      - name: Locate .ipk
+        id: find
+        run: |
+          IPK=$(find sdk/bin/packages -name 'luci-theme-aether_*.ipk' | head -n1)
+          echo "ipk=$IPK" >> "$GITHUB_OUTPUT"
+          echo "Found $IPK"
+
+      - name: Upload .ipk artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aether-${{ inputs.target }}
+          path: ${{ steps.find.outputs.ipk }}
+          if-no-files-found: warn
+
+  install-check:
+    name: Simulated install check (${{ inputs.target }})
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download .ipk
+        uses: actions/download-artifact@v4
+        with:
+          name: aether-${{ inputs.target }}
+          path: dist/ipk
+      - name: Validate tar/ar layout
+        run: |
+          cd dist/ipk
+          ls -la
+          for ipk in *.ipk; do
+            echo "Inspecting $ipk"
+            # .ipk is a gzipped ar archive: control.tar.gz + data.tar.gz + debian-binary
+            mkdir -p _extract && cd _extract
+            ar x "../$ipk"
+            ls -la
+            test -f debian-binary
+            tar -tzf control.tar.gz | grep -E '^(./)?(control|postinst|prerm)' >/dev/null
+            tar -tzf data.tar.gz | grep -E '/www/luci-static/aether/(theme\.htm|css/aether\.css|js/aether\.js)' >/dev/null
+            cd ..
+          done
+          echo "Layout OK"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-check-${{ inputs.target }}
+          path: dist/ipk/_extract/control
+          if-no-files-found: warn

@@ -1,0 +1,107 @@
+/* =============================================================================
+ * Aether — Card, Stat, KPI
+ * ============================================================================= */
+
+.ae-card {
+  position: relative;
+  background: var(--ae-card);
+  border: 1px solid var(--ae-border);
+  border-radius: var(--ae-radius);
+  box-shadow: var(--ae-shadow-1);
+  padding: var(--ae-spacing-5);
+  transition:
+    box-shadow var(--ae-duration) var(--ae-easing),
+    transform  var(--ae-duration) var(--ae-easing),
+    border-color var(--ae-duration) var(--ae-easing);
+}
+
+.ae-card--hover:hover {
+  box-shadow: var(--ae-shadow-2);
+  transform: translateY(-1px);
+}
+
+.ae-card--flat { box-shadow: none; }
+.ae-card--elevated { box-shadow: var(--ae-shadow-2); }
+.ae-card--ghost {
+  background: transparent;
+  border-style: dashed;
+}
+
+.ae-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ae-spacing-3);
+  margin-bottom: var(--ae-spacing-4);
+}
+
+.ae-card__title {
+  margin: 0;
+  font-size: var(--ae-text-md);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.ae-card__sub {
+  margin: 2px 0 0;
+  font-size: var(--ae-text-xs);
+  color: var(--ae-text-3);
+}
+
+.ae-card__body { font-size: var(--ae-text-sm); color: var(--ae-text-2); }
+.ae-card__foot {
+  margin-top: var(--ae-spacing-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ae-spacing-3);
+}
+
+/* Stat / KPI widget used on dashboard. */
+.ae-widget--stat .ae-card { padding: var(--ae-spacing-4) var(--ae-spacing-5); }
+
+.ae-stat {
+  display: grid;
+  gap: 4px;
+}
+
+.ae-stat__label {
+  font-size: var(--ae-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ae-text-3);
+  font-weight: 500;
+}
+
+.ae-stat__value {
+  font-size: var(--ae-text-2xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ae-text-1);
+  font-variant-numeric: tabular-nums;
+}
+
+.ae-stat__delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--ae-text-xs);
+  color: var(--ae-text-3);
+}
+.ae-stat__delta--up   { color: var(--ae-success); }
+.ae-stat__delta--down { color: var(--ae-danger); }
+
+.ae-stat__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: var(--ae-primary-soft);
+  color: var(--ae-primary);
+}
+.ae-stat__icon .ae-icon { width: 18px; height: 18px; }
+.ae-stat__icon--accent  { background: var(--ae-accent-soft); color: var(--ae-accent); }
+.ae-stat__icon--success { background: var(--ae-success-soft); color: var(--ae-success); }
+.ae-stat__icon--warning { background: var(--ae-warning-soft); color: var(--ae-warning); }
+.ae-stat__icon--danger  { background: var(--ae-danger-soft); color: var(--ae-danger); }

@@ -1,0 +1,19 @@
+{
+  "name": "theme-aether-luci",
+  "version": "1.0.0",
+  "description": "> A premium, enterprise-grade LuCI theme for OpenWrt 25.12 Stable, designed to feel > like an appliance worth over $1000. Built on design tokens, modular widgets and > complete offline operation.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "stylelint": "^16.10.0",
+    "stylelint-config-standard": "^36.0.1"
+  }
+}
