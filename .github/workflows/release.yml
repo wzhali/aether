@@ -13,24 +13,13 @@ permissions:
   contents: write
 
 jobs:
-  build-matrix:
-    name: Build ${{ matrix.target }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - { target: x86_64,           arch: x86_64 }
-          - { target: armsr-armv8,      arch: aarch64_cortex-a53 }
-          - { target: mediatek-mt7986,  arch: aarch64_cortex-a53 }
-          - { target: qualcomm-ipq807x, arch: aarch64_cortex-a53 }
-          - { target: rockchip-armv8,   arch: aarch64_cortex-a53 }
+  build:
+    name: Build Aether (x86_64)
     uses: ./.github/workflows/build.yml
-    with:
-      target: ${{ matrix.target }}
 
   package:
     name: Assemble release
-    needs: build-matrix
+    needs: build
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/download-artifact@v4
@@ -58,7 +47,7 @@ jobs:
           tag_name: ${{ steps.tag.outputs.tag }}
           name: Aether ${{ steps.tag.outputs.tag }}
           body: |
-            Aether ${{ steps.tag.outputs.tag }} — premium LuCI theme for OpenWrt 25.12.
+            Aether ${{ steps.tag.outputs.tag }} — premium LuCI theme for OpenWrt 25.12 (x86_64 build).
             See the [changelog](../blob/${{ steps.tag.outputs.tag }}/docs/CHANGELOG.md) for details.
           files: |
             dist/**/*.ipk

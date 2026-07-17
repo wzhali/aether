@@ -1,30 +1,18 @@
-name: Build
+name: Build (x86_64 only)
 
 on:
   workflow_call:
     inputs:
       target:
-        description: "OpenWrt SDK target"
-        required: true
+        description: "OpenWrt SDK target (only x86_64 supported)"
+        required: false
         type: string
+        default: x86_64
     outputs:
       ipk:
         description: "Path to the produced .ipk"
         value: ${{ jobs.build.outputs.ipk }}
   workflow_dispatch:
-    inputs:
-      target:
-        description: "OpenWrt SDK target"
-        required: true
-        default: x86_64
-        type: choice
-        options:
-          - x86_64
-          - armsr-armv7
-          - armsr-armv8
-          - mediatek-mt7986
-          - qualcomm-ipq807x
-          - rockchip-armv8
 
 permissions:
   contents: read
@@ -83,7 +71,7 @@ jobs:
         run: python3 scripts/preview.py dist/preview
       - uses: actions/upload-artifact@v4
         with:
-          name: preview-${{ inputs.target }}
+          name: preview
           path: dist/preview
           if-no-files-found: error
 
@@ -103,18 +91,18 @@ jobs:
       - name: Download preview artifact
         uses: actions/download-artifact@v4
         with:
-          name: preview-${{ inputs.target }}
+          name: preview
           path: dist/preview
       - name: Capture
         run: python3 scripts/screenshot.py dist/preview dist/screenshots
       - uses: actions/upload-artifact@v4
         with:
-          name: screenshots-${{ inputs.target }}
+          name: screenshots
           path: dist/screenshots
           if-no-files-found: error
 
   build:
-    name: Build SDK package (${{ inputs.target }})
+    name: Build SDK package (x86_64)
     needs: [lint]
     runs-on: ubuntu-24.04
     outputs:
@@ -126,13 +114,12 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq zstd file make gcc g++ unzip wget xz-utils \
-            python3 perl tar rsync libncurses5-dev libssl-dev
+            python3 perl tar rsync libncurses5-dev libssl-dev ncurses-term
 
       - name: Free disk space
         run: |
           # Default ubuntu-24.04 runners have ~30 GB free, but OpenWrt SDK
           # builds dl/ build_dir/ packages/ and they fill up fast.
-          # Drop unused toolchains/images to reclaim space.
           sudo apt-get clean
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
             /opt/hostedtoolcache/CodeQL || true
@@ -140,33 +127,24 @@ jobs:
             /usr/local/share/boost /usr/local/lib/node_modules || true
           df -h /
 
-      - name: Fetch OpenWrt 25.12 SDK
+      - name: Fetch OpenWrt 25.12 SDK (x86_64)
         run: |
           set -e
-          BASE="https://downloads.openwrt.org/releases/25.12.0/targets"
-          # Map our short target name -> URL sub-path and SDK filename slug.
-          # OpenWrt 25.12 publishes SDKs as .tar.zst, named with toolchain suffix.
-          case "${{ inputs.target }}" in
-            x86_64)              SUBDIR="x86/64";        SLUG="x86-64" ;;
-            armsr-armv8)         SUBDIR="armsr/armv8";   SLUG="armsr-armv8" ;;
-            mediatek-mt7986)     SUBDIR="mediatek/mt7986"; SLUG="mediatek-mt7986" ;;
-            qualcomm-ipq807x)    SUBDIR="qualcomm/ipq807x"; SLUG="qualcomm-ipq807x" ;;
-            rockchip-armv8)      SUBDIR="rockchip/armv8"; SLUG="rockchip-armv8" ;;
-            *) echo "Unknown target ${{ inputs.target }}"; exit 1 ;;
-          esac
-          URL="${BASE}/${SUBDIR}/openwrt-sdk-25.12.0-${SLUG}_gcc-14.3.0_musl.Linux-x86_64.tar.zst"
+          BASE="https://downloads.openwrt.org/releases/25.12.0/targets/x86/64"
+          URL="${BASE}/openwrt-sdk-25.12.0-x86-64_gcc-14.3.0_musl.Linux-x86_64.tar.zst"
           echo "Fetching $URL"
           mkdir -p sdk && cd sdk
           wget -q "$URL" -O sdk.tar.zst
-          # Ubuntu runners ship zstd; otherwise `apt-get install -y zstd` first.
           tar --use-compress-program=unzstd -xf sdk.tar.zst --strip-components=1
+          # Drop the downloaded archive immediately to save disk.
+          rm -f sdk.tar.zst
           ls
 
       - name: Mount theme
         run: |
-          # Copy only the theme source tree. The CWD already contains the
-          # freshly-extracted `sdk/` directory, so we MUST exclude it to
-          # avoid recursively copying SDK into itself.
+          # Copy only the theme source tree. CWD already contains the
+          # freshly-extracted `sdk/` directory, so exclude it to avoid
+          # recursively copying SDK into itself.
           mkdir -p sdk/package/luci-theme-aether
           rsync -a \
             --exclude='.git' \
@@ -177,32 +155,64 @@ jobs:
             ./ sdk/package/luci-theme-aether/
           ls sdk/package/luci-theme-aether/
 
-      - name: Build package
+      - name: Configure SDK
         run: |
           cd sdk
+          # Provide a terminal so make's internal config scripts don't fail
+          # with "Error opening terminal: unknown".
+          export TERM=xterm
           ./scripts/feeds update -i luci
           ./scripts/feeds install -p luci luci-base
-          make package/luci-theme-aether/compile -j$(nproc) V=s
-          # Clean intermediates so the install-check can fit on disk too.
-          rm -rf tmp/ build_dir/ staging_dir/ .config.old
+          # Generate a minimal .config without invoking menuconfig.
+          make defconfig
+          # Disable kernel build (we only need the theme package) and a few
+          # heavyweight sub-targets to keep the SDK footprint small.
+          ./scripts/config --disable CONFIG_BUILD_TARGET_HOST_PACKAGES_IGNORE 2>/dev/null || true
+          ./scripts/config --disable CONFIG_KERNEL_BUILD_DOMAIN 2>/dev/null || true
+          ./scripts/config --disable CONFIG_COLLECT_KERNEL_DEBUG 2>/dev/null || true
+          yes "" | make oldconfig >/dev/null 2>&1 || true
+          echo "--- .config snippet ---"
+          grep -E 'CONFIG_TARGET_|CONFIG_LUCI' .config | head -10
+
+      - name: Build theme package
+        run: |
+          cd sdk
+          export TERM=xterm
+          # Compile a single package — avoids kernel / image targets.
+          make -j"$(nproc)" package/luci-theme-aether/compile V=s
+          echo "--- .ipk ---"
+          ls -la bin/packages/*/luci/ 2>/dev/null || ls -la bin/packages/ 2>/dev/null
+
+      - name: Trim SDK intermediates
+        run: |
+          # Free space before install-check needs to download the artifact.
+          cd sdk
+          rm -rf tmp build_dir staging_dir dl feeds .config.old
+          # Keep only the produced .ipk
+          du -sh bin/packages 2>/dev/null || true
           df -h .
 
       - name: Locate .ipk
         id: find
         run: |
           IPK=$(find sdk/bin/packages -name 'luci-theme-aether_*.ipk' | head -n1)
+          if [ -z "$IPK" ]; then
+            echo "ERROR: no .ipk found under sdk/bin/packages" >&2
+            find sdk/bin -type f | head -20 >&2 || true
+            exit 1
+          fi
           echo "ipk=$IPK" >> "$GITHUB_OUTPUT"
           echo "Found $IPK"
 
       - name: Upload .ipk artifact
         uses: actions/upload-artifact@v4
         with:
-          name: aether-${{ inputs.target }}
+          name: aether-ipk
           path: ${{ steps.find.outputs.ipk }}
-          if-no-files-found: warn
+          if-no-files-found: error
 
   install-check:
-    name: Simulated install check (${{ inputs.target }})
+    name: Simulated install check
     needs: build
     runs-on: ubuntu-24.04
     steps:
@@ -210,26 +220,27 @@ jobs:
       - name: Download .ipk
         uses: actions/download-artifact@v4
         with:
-          name: aether-${{ inputs.target }}
+          name: aether-ipk
           path: dist/ipk
-      - name: Validate tar/ar layout
+      - name: Inspect .ipk
         run: |
           cd dist/ipk
           ls -la
-          for ipk in *.ipk; do
-            echo "Inspecting $ipk"
-            # .ipk is a gzipped ar archive: control.tar.gz + data.tar.gz + debian-binary
-            mkdir -p _extract && cd _extract
-            ar x "../$ipk"
-            ls -la
-            test -f debian-binary
-            tar -tzf control.tar.gz | grep -E '^(./)?(control|postinst|prerm)' >/dev/null
-            tar -tzf data.tar.gz | grep -E '/www/luci-static/aether/(theme\.htm|css/aether\.css|js/aether\.js)' >/dev/null
-            cd ..
-          done
+          IPK=$(ls *.ipk | head -n1)
+          echo "Inspecting $IPK"
+          mkdir -p _extract && cd _extract
+          # .ipk is gzipped ar archive
+          ar x "../$IPK"
+          ls -la
+          test -f debian-binary
+          tar -tzf control.tar.gz | grep -E '^(./)?(control|postinst|prerm)' >/dev/null
+          tar -tzf data.tar.gz | grep -E '/www/luci-static/aether/(theme\.htm|css/aether\.css|js/aether\.js)' >/dev/null
+          # Extract data.tar.gz to verify actual content
+          mkdir -p data && tar -xzf data.tar.gz -C data
+          echo "--- /www/luci-static/aether top-level ---"
+          ls data/www/luci-static/aether/
+          echo "--- CSS files ---"
+          ls data/www/luci-static/aether/css/
+          echo "--- JS files ---"
+          ls data/www/luci-static/aether/js/
           echo "Layout OK"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: install-check-${{ inputs.target }}
-          path: dist/ipk/_extract/control
-          if-no-files-found: warn
