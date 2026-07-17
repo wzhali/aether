@@ -15,6 +15,8 @@ PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Aether Contributors <noreply@example.com>
 PKG_BUILD_DIR:=$(CURDIR)
 
+include $(INCLUDE_DIR)/package.mk
+
 define Package/luci-theme-aether
   SECTION:=luci
   CATEGORY:=LuCI
