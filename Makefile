@@ -13,7 +13,10 @@ PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Aether Contributors <noreply@example.com>
-PKG_BUILD_DIR:=$(CURDIR)
+
+# Note: do NOT override PKG_BUILD_DIR — the build system defaults it to
+# $(BUILD_DIR)/$(PKG_NAME), and our install rule already uses $(CURDIR)
+# to reach the source tree, which is more robust than $(PKG_BUILD_DIR).
 
 include $(INCLUDE_DIR)/package.mk
 
