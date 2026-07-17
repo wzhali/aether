@@ -152,9 +152,12 @@ jobs:
 
       - name: Mount theme
         run: |
-          cp -r . sdk/package/luci-theme-aether
-          rm -rf sdk/package/luci-theme-aether/.git
-          rm -rf sdk/package/luci-theme-aether/node_modules
+          # Copy only the theme source tree, skip .git / node_modules / dist.
+          mkdir -p sdk/package/luci-theme-aether
+          rsync -a --exclude='.git' --exclude='node_modules' --exclude='dist' \
+            --exclude='.DS_Store' \
+            ./ sdk/package/luci-theme-aether/
+          ls sdk/package/luci-theme-aether/
 
       - name: Build package
         run: |
