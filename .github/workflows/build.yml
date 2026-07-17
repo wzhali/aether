@@ -227,6 +227,7 @@ jobs:
       - name: Inspect package
         run: |
           set -e
+          pip install --quiet zstandard
           cd dist/pkg
           ls -la
           PKG=$(ls *.ipk *.apk 2>/dev/null | head -n1)
