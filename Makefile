@@ -4,15 +4,18 @@
 
 include $(TOPDIR)/rules.mk
 
+PKG_NAME:=luci-theme-aether
+PKG_VERSION:=1.0.0
+PKG_RELEASE:=1
+PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Aether Contributors <noreply@example.com>
+
 LUCI_TITLE:=Aether LuCI Theme (Ultimate Edition)
 LUCI_DEPENDS:=+luci-base
 LUCI_PKGARCH:=all
 LUCI_DESCRIPTION:=A production-grade, enterprise-style LuCI theme for OpenWrt 25.12 \
 	with visionOS / Material 3 / Fluent inspired visuals, full design tokens, \
 	modular dashboard widgets and complete offline operation.
-PKG_LICENSE:=Apache-2.0
-PKG_MAINTAINER:=Aether Contributors <noreply@example.com>
-PKG_VERSION:=1.0.0
 
 # Where the runtime assets live in the source tree (used by the install rule).
 PKG_BUILD_DIR:=$(CURDIR)
