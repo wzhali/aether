@@ -1,34 +1,21 @@
 # Aether — OpenWrt 25.12 LuCI Theme
-# Repository root Makefile.
-# Real packaging lives under luci/.
+# Repository root Makefile (consumed by the OpenWrt 25.12 SDK).
+# Template mirrors the official luci-theme-bootstrap Makefile.
 
-PKG_NAME:=aether
-PKG_VERSION:=1.0.0
-PKG_RELEASE:=1
+include $(TOPDIR)/rules.mk
+
+LUCI_TITLE:=Aether LuCI Theme (Ultimate Edition)
+LUCI_DEPENDS:=+luci-base
+LUCI_PKGARCH:=all
+LUCI_DESCRIPTION:=A production-grade, enterprise-style LuCI theme for OpenWrt 25.12 \
+	with visionOS / Material 3 / Fluent inspired visuals, full design tokens, \
+	modular dashboard widgets and complete offline operation.
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Aether Contributors <noreply@example.com>
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://github.com/aether-luci/aether.git
+PKG_VERSION:=1.0.0
 
-include $(INCLUDE_DIR)/package.mk
-
-define Package/luci-theme-aether
-  SECTION:=luci
-  CATEGORY:=LuCI
-  SUBMENU:=Themes
-  TITLE:=Aether LuCI Theme (Ultimate Edition)
-  PKGARCH:=all
-  DEPENDS:=+luci-base
-endef
-
-define Package/luci-theme-aether/description
-A production-grade, enterprise-style LuCI theme for OpenWrt 25.12 with
-visionOS / Material 3 / Fluent inspired visuals, full design tokens,
-modular dashboard widgets and complete offline operation.
-endef
-
-define Build/Compile
-endef
+# Where the runtime assets live in the source tree (used by the install rule).
+PKG_BUILD_DIR:=$(CURDIR)
 
 define Package/luci-theme-aether/install
 	$(INSTALL_DIR) $(1)/www/luci-static/aether
@@ -45,4 +32,5 @@ define Package/luci-theme-aether/postinst
 exit 0
 endef
 
-$(eval $(call BuildPackage,luci-theme-aether))
+include ../../luci.mk
+# call BuildPackage - OpenWrt buildroot signature

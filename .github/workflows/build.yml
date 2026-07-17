@@ -142,18 +142,18 @@ jobs:
 
       - name: Mount theme
         run: |
-          # Copy only the theme source tree. CWD already contains the
-          # freshly-extracted `sdk/` directory, so exclude it to avoid
-          # recursively copying SDK into itself.
-          mkdir -p sdk/package/luci-theme-aether
+          # Place the theme under the SDK's `luci` feed path so the standard
+          # `make package/feeds/luci/<pkg>/compile` rule resolves the relative
+          # `include ../../luci.mk` correctly.
+          mkdir -p sdk/feeds/luci/luci-theme-aether
           rsync -a \
             --exclude='.git' \
             --exclude='node_modules' \
             --exclude='dist' \
             --exclude='sdk' \
             --exclude='.DS_Store' \
-            ./ sdk/package/luci-theme-aether/
-          ls sdk/package/luci-theme-aether/
+            ./ sdk/feeds/luci/luci-theme-aether/
+          ls sdk/feeds/luci/luci-theme-aether/
 
       - name: Configure SDK
         run: |
@@ -162,14 +162,9 @@ jobs:
           # with "Error opening terminal: unknown".
           export TERM=xterm
           ./scripts/feeds update -i luci
-          ./scripts/feeds install -p luci luci-base
+          ./scripts/feeds install -p luci luci-theme-aether
           # Generate a minimal .config without invoking menuconfig.
           make defconfig
-          # Disable kernel build (we only need the theme package) and a few
-          # heavyweight sub-targets to keep the SDK footprint small.
-          ./scripts/config --disable CONFIG_BUILD_TARGET_HOST_PACKAGES_IGNORE 2>/dev/null || true
-          ./scripts/config --disable CONFIG_KERNEL_BUILD_DOMAIN 2>/dev/null || true
-          ./scripts/config --disable CONFIG_COLLECT_KERNEL_DEBUG 2>/dev/null || true
           yes "" | make oldconfig >/dev/null 2>&1 || true
           echo "--- .config snippet ---"
           grep -E 'CONFIG_TARGET_|CONFIG_LUCI' .config | head -10
@@ -178,8 +173,8 @@ jobs:
         run: |
           cd sdk
           export TERM=xterm
-          # Compile a single package — avoids kernel / image targets.
-          make -j"$(nproc)" package/luci-theme-aether/compile V=s
+          # Compile only the theme package via the luci feed path.
+          make -j"$(nproc)" package/feeds/luci/luci-theme-aether/compile V=s
           echo "--- .ipk ---"
           ls -la bin/packages/*/luci/ 2>/dev/null || ls -la bin/packages/ 2>/dev/null
 
